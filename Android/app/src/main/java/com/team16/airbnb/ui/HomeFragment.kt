@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -53,7 +55,7 @@ class HomeFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    //modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
                     HomeView()
@@ -94,16 +96,17 @@ class HomeFragment : Fragment() {
                 }
             },
             backgroundColor = Off_White,
-            )
+        )
     }
 
     @Composable
     fun NearTripView(info: List<NearInfo>) {
         LazyHorizontalGrid(
-            rows = GridCells.Fixed(2),
             modifier = Modifier
                 .height(200.dp)
-                .fillMaxWidth()
+                //.wrapContentHeight()
+                .fillMaxWidth(),
+            rows = GridCells.Fixed(2)
         ) {
             items(info) { info ->
                 NearDestination(info = info)
@@ -125,19 +128,37 @@ class HomeFragment : Fragment() {
     fun NearDestination(info: NearInfo) {
         Row(
             modifier = Modifier
-                .width(200.dp)
+                .width(220.dp)
+                //.fillMaxWidth(0.3f)
+                .padding(16.dp, 0.dp, 16.dp, 0.dp)
+                .wrapContentHeight()
         ) {
             Box(
-                modifier = Modifier.size(40.dp, 40.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.35f)
+                    .align(CenterVertically)
+                    .aspectRatio(1 / 1f)
             ) {
                 ImageLoad(image = info.image)
             }
-            
-            Spacer(modifier = Modifier.width(20.dp))
-            Column(modifier = Modifier.size(100.dp, 60.dp)) {
-                Text(text = "${info.name}")
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .align(CenterVertically)
+            ) {
+                Text(
+                    text = "${info.name}",
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.height(10.dp))
-                Text("${info.distance}")
+                Text(
+                    "${info.distance}",
+                    fontSize = 16.sp
+                )
             }
 
         }
@@ -156,7 +177,8 @@ class HomeFragment : Fragment() {
             Image(
                 painter = painterResource(id = R.drawable.hero_image),
                 contentDescription = "hero_image",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -173,12 +195,12 @@ class HomeFragment : Fragment() {
                 fontSize = 23.sp
             )
 
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
             NearTripView(info = list)
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             Text(
                 text = "어디에서나, 여행은\n살아보는거야",
                 modifier = Modifier
@@ -190,9 +212,9 @@ class HomeFragment : Fragment() {
                 ),
                 fontSize = 23.sp
             )
-            
-            Spacer(modifier = Modifier.height(30.dp))
-            
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             HomeLastView(info = lastList)
         }
     }
@@ -203,8 +225,8 @@ class HomeFragment : Fragment() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) { 
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
             items(info) {
                 LastViewItem(info = it)
             }
@@ -216,22 +238,23 @@ class HomeFragment : Fragment() {
         Column(
             modifier = Modifier
                 .wrapContentHeight()
-                .width(200.dp)
+                .width(230.dp)
+                .padding(16.dp, 0.dp)
         ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(242 / 294f),
-                shape = RoundedCornerShape(15),
+                shape = RoundedCornerShape(8),
                 elevation = 30.dp
             ) {
                 ImageLoad(image = info.image)
             }
-            
+
             Spacer(modifier = Modifier.height(10.dp))
-            
+
             Text(text = info.title)
-            
+
         }
     }
 
