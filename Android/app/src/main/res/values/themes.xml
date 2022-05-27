@@ -12,5 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/airbnb_offWhite</item>
         <!-- Customize your theme here. -->
+
+        <item name="colorControlActivated">@color/airbnb_Black</item>
     </style>
 </resources>

@@ -1,6 +1,7 @@
 package com.team16.airbnb.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,13 +30,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.team16.airbnb.R
 import com.team16.airbnb.data.NearInfo
 import com.team16.airbnb.data.lastList
 import com.team16.airbnb.data.list
 import com.team16.airbnb.databinding.FragmentHomeBinding
+import com.team16.airbnb.databinding.FragmentSearchBinding
 import com.team16.airbnb.ui.theme.AirbnbTheme
 import com.team16.airbnb.ui.theme.Airbnb_Black
 import com.team16.airbnb.ui.theme.Airbnb_Primary
@@ -43,14 +47,23 @@ import com.team16.airbnb.ui.theme.Off_White
 
 class HomeFragment : Fragment() {
 
-    private val binding: FragmentHomeBinding by lazy {
-        FragmentHomeBinding.inflate(layoutInflater)
-    }
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("AppTest", "HomeFragment/ onCreateView")
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("AppTest", "HomeFragment/ onViewCreated")
+
         binding.composeViewInHome.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -62,8 +75,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        return binding.root
+
     }
+
+
 
     @Composable
     fun HomeView() {
@@ -84,7 +99,9 @@ class HomeFragment : Fragment() {
             },
             actions = {
                 IconButton(
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+                    }
                 ) {
                     Icon(
                         painter = painterResource(
@@ -95,7 +112,7 @@ class HomeFragment : Fragment() {
                     )
                 }
             },
-            backgroundColor = Off_White,
+            backgroundColor = Off_White
         )
     }
 
