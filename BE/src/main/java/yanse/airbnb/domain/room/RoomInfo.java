@@ -1,6 +1,7 @@
 package yanse.airbnb.domain.room;
 
 import javax.persistence.Embeddable;
+import yanse.airbnb.type.RoomType;
 
 @Embeddable
 public class RoomInfo {

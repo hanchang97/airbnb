@@ -1,4 +1,4 @@
-package yanse.airbnb.domain.room;
+package yanse.airbnb.type;
 
 import lombok.RequiredArgsConstructor;
 
