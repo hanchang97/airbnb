@@ -38,7 +38,7 @@ public class Reservation {
 	private int reservationPrice;
 
 	@Embedded
-	private DetailFee discountPolicy;
+	private DetailFee detailFee;
 
 	private LocalDateTime checkInDateTime;
 

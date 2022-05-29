@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import yanse.airbnb.domain.reservation.Reservation;
-import yanse.airbnb.domain.wish.WishList;
+import yanse.airbnb.domain.wish.Wish;
 
 @Entity
 public class Member {
@@ -25,9 +25,9 @@ public class Member {
 	private String email;
 
 	@OneToMany(mappedBy = "member", cascade = ALL)
-	private List<WishList> wishList = new ArrayList<>();
+	private List<Wish> wishList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = ALL)
 	private List<Reservation> reservationList = new ArrayList<>();
 
 }
