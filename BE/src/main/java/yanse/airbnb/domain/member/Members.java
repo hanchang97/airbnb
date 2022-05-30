@@ -14,7 +14,7 @@ import yanse.airbnb.domain.reservation.Reservation;
 import yanse.airbnb.domain.wish.Wish;
 
 @Entity
-public class Member {
+public class Members {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
