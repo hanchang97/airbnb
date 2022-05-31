@@ -1,92 +1,95 @@
 package com.team16.airbnb.ui.calendar
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.team16.airbnb.data.model.CalendarData
 import com.team16.airbnb.data.model.DayInfo
+import com.team16.airbnb.data.repository.CalendarRepository
+import com.team16.airbnb.data.repository.CalendarRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.*
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class CalendarViewModel: ViewModel() {
+@HiltViewModel
+class CalendarViewModel @Inject constructor(
+    private val calendarRepository: CalendarRepository
+): ViewModel() {
 
     private val _calendar = MutableStateFlow<List<CalendarData>>(emptyList())
     val calendar: StateFlow<List<CalendarData>> = _calendar
+
+    private var _startDate = DayInfo("", "")
+    val startDate = _startDate
+
+    private var _endDate = DayInfo("", "")
+    val endDate = _endDate
 
     private var todayMonth: Int = -1
     private var today: Int = -1
 
     init {
-        setCalendar()
+        viewModelScope.launch {
+            calendarRepository.getCalendar().collect{
+                _calendar.value = it
+            }
+        }
     }
 
-    private fun setCalendar() {
-        val cal = Calendar.getInstance()
-        var month = cal.get(Calendar.MONTH) + 1
-        var year = cal.get(Calendar.YEAR)
-
-        todayMonth = month
-        today = cal.get(Calendar.DATE)
-
-        val list = mutableListOf<CalendarData>()
-
-        for (i in 0 until 13) {
-            if(month > 12) {
-                month = 1
-                year++
+    fun setDate(dayInfo: DayInfo) {
+        when {
+            _startDate.day == "" && _endDate.day == "" -> {
+                _startDate = dayInfo
+                setStartDate()
             }
 
-            list.add(
-                CalendarData(
-                    "${year}년 ${month}월",
-                    calendar(year, month)
-                )
-            )
-            month++
-        }
-    }
-
-    private fun calendar(year: Int, month: Int): List<DayInfo> {
-        val cal = Calendar.getInstance()
-        cal.set(year, month - 1, 1)
-        var start = cal.get(Calendar.DAY_OF_WEEK)
-        val days = mutableListOf<DayInfo>()
-
-        for (i in 1 until start) {
-            days.add(DayInfo(" ", isPossible = false))
-            Log.d("Tag", "${days[i].day}")
-        }
-
-
-        for (i in 1..cal.getActualMaximum(Calendar.DATE)) {
-            when(month == todayMonth) {
-                true -> {
-                    days.add(
-                        DayInfo(
-                            day = "$i",
-                            isPossible = setIsPossible(today, i)
-                        )
-                    )
-                }
-
-                false -> {
-                    days.add(
-                        DayInfo(
-                            day = "$i",
-                            isPossible = true
-                        )
-                    )
-                }
+            _startDate.day != "" && _endDate.day == "" -> {
+                checkDate(dayInfo)
             }
 
-            start++
         }
-
-        return days
     }
 
-    private fun setIsPossible(today: Int, day: Int) = today > day
+    private fun checkDate(dayInfo: DayInfo) = when {
+        _startDate.month >= dayInfo.month -> {
+            checkDay(dayInfo)
+        }
 
+        else -> {
+            _endDate = dayInfo
+        }
+    }
+
+    private fun checkDay(dayInfo: DayInfo) = when(_startDate.day >= dayInfo.day) {
+         true -> {
+            _startDate = DayInfo("", "")
+        }
+        false -> {
+            _endDate = dayInfo
+            setStartDate()
+        }
+
+    }
+
+    private fun setStartDate() {
+        _calendar.value.forEach { data ->
+            data.days.forEach {
+                if(it.month == _startDate.month && it.day == _startDate.day) {
+                    it.isChoice = true
+                }
+                if(it.month == _endDate.month && it.day == _endDate.day) {
+                    it.isChoice = true
+                }
+            }
+        }
+    }
+
+    private fun setCancelDate() {
+        _calendar.value.forEach { data ->
+            data.days.forEach {
+                    it.isChoice = false
+            }
+        }
+    }
 }

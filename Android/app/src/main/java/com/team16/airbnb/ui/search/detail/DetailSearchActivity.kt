@@ -18,6 +18,7 @@ class DetailSearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.topAppBar)
+
     }
 
 }

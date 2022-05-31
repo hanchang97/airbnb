@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.team16.airbnb.R
 import com.team16.airbnb.databinding.FragmentDetailSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +28,7 @@ class DetailSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnBackButton()
+        val navController = findNavController()
     }
 
     private fun setOnBackButton() {

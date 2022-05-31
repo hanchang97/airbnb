@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.team16.airbnb.common.DateChoiceListener
 import com.team16.airbnb.data.model.CalendarData
 import com.team16.airbnb.databinding.ItemCalendarBinding
 
-class CalendarAdapter: ListAdapter<CalendarData, CalendarAdapter.CalendarViewHolder>(CalendarDiffUtil) {
+class CalendarAdapter(private val listener: DateChoiceListener): ListAdapter<CalendarData, CalendarAdapter.CalendarViewHolder>(CalendarDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         return CalendarViewHolder(ItemCalendarBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
@@ -18,14 +19,14 @@ class CalendarAdapter: ListAdapter<CalendarData, CalendarAdapter.CalendarViewHol
         holder.bind(getItem(position))
     }
 
-    class CalendarViewHolder(private val binding: ItemCalendarBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class CalendarViewHolder(private val binding: ItemCalendarBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(calendarData: CalendarData) {
             binding.item = calendarData
             setAdapter(calendarData)
         }
 
         private fun setAdapter(calendarData: CalendarData) {
-            val dayAdapter = DayAdapter()
+            val dayAdapter = DayAdapter(listener)
             val lm = GridLayoutManager(binding.root.context,7)
 
             binding.tvCalendarDay.apply {
