@@ -1,5 +1,6 @@
 
-insert into image (content, image_type, title, url) values ('content', '메인', 'title', 'url');
+insert into image (content, image_type, title, url) values ('content', 'hero', 'title', 'url'),
+                                                           ('content', 'around', 'title', 'url');
 
 insert into members (email, members_name, members_image) values ('google', 'hanse', 'imageUrl');
 
