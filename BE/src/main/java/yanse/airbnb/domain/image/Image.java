@@ -7,9 +7,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import lombok.Getter;
 import yanse.airbnb.type.ImageType;
 
 @Entity
+@Getter
 public class Image {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
