@@ -3,6 +3,7 @@ package yanse.airbnb.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yanse.airbnb.domain.image.Image;
 import yanse.airbnb.domain.image.MainImageRepository;
 import yanse.airbnb.type.ImageType;
 import yanse.airbnb.web.dto.ImageListDto;
@@ -20,7 +21,7 @@ public class MainService {
 
     public List<ImageListDto> findAllByImage(String imageType){
         return mainImageRepository.findAllByImageType(ImageType.valueOf(imageType))
-                .stream().map(ImageListDto::new)
+                .stream().map(Image::toImageListDTO)
                 .collect(Collectors.toList());
     }
 
