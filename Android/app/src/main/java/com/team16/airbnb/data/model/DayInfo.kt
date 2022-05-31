@@ -5,5 +5,7 @@ data class DayInfo(
     val month: String,
     var isPossible: Boolean = false,
     var isChoice: Boolean = false,
-    var isChecked: Boolean = false
+    var isChecked: Boolean = false,
+    var isStart: Boolean = false,
+    var isEnd: Boolean = false
 )

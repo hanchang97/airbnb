@@ -12,6 +12,6 @@ class CalendarRepositoryImpl @Inject constructor(
 
     override fun getCalendar() = calendarDataSource.getCalendar()
 
-    override fun setStartDate(startDate: DayInfo) = calendarDataSource.setStartDate(startDate)
+    override fun setPickDate(startDate: DayInfo, endDate: DayInfo) = calendarDataSource.setPickDate(startDate, endDate)
 
 }

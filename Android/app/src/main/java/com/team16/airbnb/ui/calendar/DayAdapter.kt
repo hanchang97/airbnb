@@ -36,7 +36,7 @@ class DayAdapter(private val listener: DateChoiceListener): ListAdapter<DayInfo,
 
     private object DayDiffUtil: DiffUtil.ItemCallback<DayInfo>() {
         override fun areItemsTheSame(oldItem: DayInfo, newItem: DayInfo) =
-            oldItem.hashCode() == newItem.hashCode()
+            oldItem.day == newItem.day
 
         override fun areContentsTheSame(oldItem: DayInfo, newItem: DayInfo) =
             oldItem == newItem

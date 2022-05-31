@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface CalendarDataSource {
     fun getCalendar(): Flow<List<CalendarData>>
 
-    fun setStartDate(startDate: DayInfo): Flow<List<CalendarData>>
+    fun setPickDate(startDate: DayInfo, endDate: DayInfo): Flow<List<CalendarData>>
 }

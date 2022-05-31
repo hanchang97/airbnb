@@ -25,7 +25,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
 
         val list = mutableListOf<CalendarData>()
 
-        for (i in 0 until 13) {
+        for (i in 0 until 12) {
             if (month > 12) {
                 month = 1
                 year++
@@ -43,33 +43,34 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
         emit(list)
     }
 
-    override fun setStartDate(startDate: DayInfo): Flow<List<CalendarData>> = flow {
-        val cal = Calendar.getInstance()
-        var month = cal.get(Calendar.MONTH) + 1
-        var year = cal.get(Calendar.YEAR)
+    override fun setPickDate(startDate: DayInfo, endDate: DayInfo): Flow<List<CalendarData>> =
+        flow {
+            val cal = Calendar.getInstance()
+            var month = cal.get(Calendar.MONTH) + 1
+            var year = cal.get(Calendar.YEAR)
 
-        todayMonth = month
-        today = cal.get(Calendar.DATE)
+            todayMonth = month
+            today = cal.get(Calendar.DATE)
 
-        val list = mutableListOf<CalendarData>()
+            val list = mutableListOf<CalendarData>()
 
-        for (i in 0 until 13) {
-            if (month > 12) {
-                month = 1
-                year++
-            }
+            for (i in 0 until 12) {
+                if (month > 12) {
+                    month = 1
+                    year++
+                }
 
-            list.add(
-                CalendarData(
-                    "${year}년 ${month}월",
-                    setDays(year, month)
+                list.add(
+                    CalendarData(
+                        "${year}년 ${month}월",
+                        setPickDay(year, month, startDate, endDate)
+                    )
                 )
-            )
-            Log.d("TAG", "${year}년 ${month}월")
-            month++
+                Log.d("TAG", " $i ${year}년 ${month}월")
+                month++
+            }
+            emit(list)
         }
-        emit(list)
-    }
 
     private fun setDays(year: Int, month: Int): List<DayInfo> {
         val cal = Calendar.getInstance()
@@ -110,6 +111,75 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
         return days
     }
 
+    private fun setPickDay(
+        year: Int,
+        month: Int,
+        startDate: DayInfo,
+        endDate: DayInfo
+    ): List<DayInfo> {
+        val cal = Calendar.getInstance()
+        cal.set(year, month - 1, 1)
+        var start = cal.get(Calendar.DAY_OF_WEEK)
+        val days = mutableListOf<DayInfo>()
+
+        for (i in 1 until start) {
+            days.add(DayInfo(" ", " ", isPossible = false))
+        }
+
+        for (i in 1..cal.getActualMaximum(Calendar.DATE)) {
+            when (month == todayMonth) {
+                true -> {
+                    days.add(
+                        DayInfo(
+                            day = "$i",
+                            month = "$month",
+                            isPossible = setIsPossible(today, i),
+                            isChoice = setChoice(
+                                "$month",
+                                startDate.month,
+                                endDate.month,
+                                "$i",
+                                startDate.day,
+                                endDate.day
+                            )
+                        )
+                    )
+                }
+
+                false -> {
+                    days.add(
+                        DayInfo(
+                            day = "$i",
+                            month = "$month",
+                            isPossible = true,
+                            isChoice = setChoice(
+                                "$month",
+                                startDate.month,
+                                endDate.month,
+                                "$i",
+                                startDate.day,
+                                endDate.day
+                            )
+                        )
+                    )
+                }
+            }
+
+            start++
+        }
+
+        return days
+    }
+
+    private fun setChoice(
+        month: String,
+        startMonth: String,
+        endMonth: String,
+        day: String,
+        startDay: String,
+        endDay: String
+    ) =
+        month == startMonth && day == startDay || month == endMonth && day == endDay
 
 
     private fun setIsPossible(today: Int, day: Int) = today <= day
