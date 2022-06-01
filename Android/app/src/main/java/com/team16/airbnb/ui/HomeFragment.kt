@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,11 +34,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.team16.airbnb.R
-import com.team16.airbnb.data.NearInfo
-import com.team16.airbnb.data.lastList
-import com.team16.airbnb.data.list
+import com.team16.airbnb.data.model.NearInfo
+import com.team16.airbnb.data.model.lastList
+import com.team16.airbnb.data.model.list
 import com.team16.airbnb.databinding.FragmentHomeBinding
-import com.team16.airbnb.databinding.FragmentSearchBinding
 import com.team16.airbnb.ui.theme.AirbnbTheme
 import com.team16.airbnb.ui.theme.Airbnb_Black
 import com.team16.airbnb.ui.theme.Airbnb_Primary

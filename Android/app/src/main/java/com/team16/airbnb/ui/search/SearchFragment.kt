@@ -1,5 +1,6 @@
 package com.team16.airbnb.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +11,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.team16.airbnb.R
+import com.team16.airbnb.data.model.list
 import com.team16.airbnb.databinding.FragmentSearchBinding
+import com.team16.airbnb.ui.search.detail.DetailSearchActivity
 
 class SearchFragment : Fragment() {
 
@@ -20,7 +23,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         val view = binding.root
         return view
@@ -32,6 +35,7 @@ class SearchFragment : Fragment() {
         setBackButton()
         setEraseButton()
         setEditText()
+        setPopularList()
     }
 
     private fun setBackButton() {
@@ -73,6 +77,15 @@ class SearchFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun setPopularList() {
+        val adapter = PopularAdapter{
+            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
+            startActivity(intent)
+        }
+        binding.rvSearchList.adapter = adapter
+        adapter.submitList(list)
     }
 
 }
