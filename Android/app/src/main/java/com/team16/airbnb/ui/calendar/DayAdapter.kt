@@ -21,6 +21,10 @@ class DayAdapter(
         holder.bind(getItem(position))
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.toLong()
+    }
+
     inner class DayViewHolder(private val binding: ItemDaysBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(dayInfo: DayInfo) {

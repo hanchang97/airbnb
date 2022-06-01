@@ -23,7 +23,7 @@ class CalendarViewModel @Inject constructor(
     private val _label = MutableStateFlow("")
     val label: StateFlow<String> = _label
 
-    private var startDate = DayInfo(day= "", month = "")
+    private var startDate = DayInfo(day = "", month = "")
 
     private var endDate = DayInfo(day = "", month = "")
 
@@ -69,11 +69,22 @@ class CalendarViewModel @Inject constructor(
         }
     }
 
-    private fun checkDay(dayInfo: DayInfo) = when (startDate.day.toInt() >= dayInfo.day.toInt()) {
+    private fun checkDay(dayInfo: DayInfo) = when (startDate.id >= dayInfo.id) {
 
         true -> {
-            startDate = DayInfo(day= "", month = "")
-            setCancelDate()
+            val list = getCopyList()
+
+            list.forEach { data ->
+                data.days[startDate.id]?.apply {
+                    isChoice = false
+                    isStart = false
+                    isEnd = false
+                    isChecked = false
+                }
+            }
+            startDate = DayInfo(day = "", month = "")
+
+            _calendar.value = list
         }
 
         false -> {
@@ -87,71 +98,45 @@ class CalendarViewModel @Inject constructor(
     private fun setPickDate() {
 
         val list = getCopyList()
-
         list.forEach { data ->
 
-            data.days.forEach {
-                when {
-
-//                    it.month == startDate.month && it.day == startDate.day -> {
-//                        it.isStart = true
-//                        it.isChoice = true
-//                        it.isChecked = true
-//                    }
-
-                    it.id == startDate.id -> {
-                        it.isStart = true
-                        it.isChoice = true
-                        it.isChecked = true
-                    }
-
-//                    it.month == endDate.month && it.day == endDate.day -> {
-//                        it.isChecked = true
-//                        it.isEnd = true
-//                        it.isChoice = true
-//                    }
-
-                    it.id == endDate.id -> {
-                        it.isEnd = true
-                        it.isChoice = true
-                        it.isChecked = true
-                    }
-
-//                    startDate.month == it.month && startDate.day.dayToInt() <= it.day.dayToInt() && endDate.day.dayToInt() >= it.day.dayToInt() -> {
-//                        it.isChecked = true
-//                    }
-
-                    startDate.id <= it.id && endDate.id >= it.id -> {
-                        it.isChecked = true
-                    }
-
-                }
+            data.days[startDate.id]?.apply {
+                isStart = true
+                isChoice = true
+                isChecked = true
             }
+
+            data.days[endDate.id]?.apply {
+                isStart = true
+                isChoice = true
+                isChecked = true
+            }
+
+            for (i in startDate.id..endDate.id) {
+                data.days[i]?.isChecked = true
+            }
+
         }
         _calendar.value = list
     }
 
-//    private fun String.dayToInt() =
-//        when (this != "") {
-//            true -> this.toInt()
-//            false -> -1
-//        }
-
 
     private fun setCancelDate() {
         val list = getCopyList()
+
         list.forEach { data ->
-            data.days.forEach {
-                it.apply {
+            for (i in startDate.id..endDate.id) {
+                data.days[i]?.apply {
                     isChoice = false
                     isStart = false
                     isEnd = false
                     isChecked = false
                 }
             }
+
         }
-        startDate = DayInfo(day= "", month = "")
-        endDate = DayInfo(day= "", month = "")
+        startDate = DayInfo(day = "", month = "")
+        endDate = DayInfo(day = "", month = "")
 
         _calendar.value = list
     }
@@ -159,9 +144,9 @@ class CalendarViewModel @Inject constructor(
     private fun getCopyList(): List<CalendarData> {
         val list = mutableListOf<CalendarData>()
         _calendar.value.forEach { data ->
-            val days = mutableListOf<DayInfo>()
-            data.days.forEach {
-                days.add(it.copy())
+            val days = mutableMapOf<Int, DayInfo>()
+            data.days.forEach { value ->
+                days[value.key] = value.value.copy()
             }
             list.add(CalendarData(data.header, days))
         }

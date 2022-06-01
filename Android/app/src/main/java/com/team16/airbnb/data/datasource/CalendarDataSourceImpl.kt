@@ -69,40 +69,37 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
             emit(list)
         }
 
-    private fun setDays(year: Int, month: Int): List<DayInfo> {
+    private fun setDays(year: Int, month: Int): Map<Int, DayInfo> {
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, 1)
         var start = cal.get(Calendar.DAY_OF_WEEK)
-        val days = mutableListOf<DayInfo>()
+        val days = mutableMapOf<Int, DayInfo>()
 
         for (i in 1 until start) {
-            days.add(DayInfo(id," ", " ", isPossible = false))
+            days[id] = DayInfo(id," ", " ", isPossible = false)
             id++
         }
 
         for (i in 1..cal.getActualMaximum(Calendar.DATE)) {
             when (month == todayMonth) {
                 true -> {
-                    days.add(
-                        DayInfo(
-                            id = id,
-                            day = "$i",
-                            month = "$month",
-                            isPossible = setIsPossible(today, i)
-                        )
+                    days[id] = DayInfo(
+                        id = id,
+                        day = "$i",
+                        month = "$month",
+                        isPossible = setIsPossible(today, i)
                     )
                     id++
                 }
 
                 false -> {
-                    days.add(
+                    days[id] =
                         DayInfo(
                             id = id,
                             day = "$i",
                             month = "$month",
                             isPossible = true
                         )
-                    )
                     id++
                 }
             }
@@ -118,20 +115,20 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
         month: Int,
         startDate: DayInfo,
         endDate: DayInfo
-    ): List<DayInfo> {
+    ): Map<Int, DayInfo> {
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, 1)
         var start = cal.get(Calendar.DAY_OF_WEEK)
-        val days = mutableListOf<DayInfo>()
+        val days = mutableMapOf<Int, DayInfo>()
 
         for (i in 1 until start) {
-            days.add(DayInfo(day= "", month = "", isPossible = false))
+            days[id] = DayInfo(day= "", month = "", isPossible = false)
         }
 
         for (i in 1..cal.getActualMaximum(Calendar.DATE)) {
             when (month == todayMonth) {
                 true -> {
-                    days.add(
+                    days[id] =
                         DayInfo(
                             id = id,
                             day = "$i",
@@ -146,12 +143,11 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                                 endDate.day
                             )
                         )
-                    )
                     id++
                 }
 
                 false -> {
-                    days.add(
+                    days[id] =
                         DayInfo(
                             id = id,
                             day = "$i",
@@ -166,7 +162,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                                 endDate.day
                             )
                         )
-                    )
+
                     id++
                 }
             }

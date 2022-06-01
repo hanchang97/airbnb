@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.team16.airbnb.R
 import com.team16.airbnb.common.DateChoiceListener
 import com.team16.airbnb.data.model.DayInfo
@@ -37,13 +38,16 @@ class CalendarFragment : Fragment(), DateChoiceListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = CalendarAdapter(this)
-        binding.rvCalendar.adapter = adapter
+        val calendarAdapter = CalendarAdapter(this)
+
+        binding.rvCalendar.apply {
+            adapter = calendarAdapter
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 calendarViewModel.calendar.collect {
-                    adapter.submitList(it)
+                    calendarAdapter.submitList(it)
                 }
             }
         }
@@ -55,6 +59,7 @@ class CalendarFragment : Fragment(), DateChoiceListener {
                 }
             }
         }
+
     }
 
     override fun setDate(dayInfo: DayInfo) {
