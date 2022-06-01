@@ -27,9 +27,7 @@ class CalendarAdapter(
         private fun setAdapter(calendarData: CalendarData) {
             val dayAdapter = DayAdapter(listener)
             val lm = GridLayoutManager(binding.root.context,7)
-
-            dayAdapter.setHasStableIds(true)
-
+            
             binding.tvCalendarDay.apply {
                 adapter = dayAdapter
                 layoutManager = lm
