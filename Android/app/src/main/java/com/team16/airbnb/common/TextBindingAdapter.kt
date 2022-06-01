@@ -59,6 +59,10 @@ fun isBeforeDay(dayView: TextView, item: DayInfo) {
             }
         }
 
+    }
+
+    @BindingAdapter("pickDate")
+    fun bindPickDateLabel(textView: TextView, item: String) {
 
     }
 

@@ -6,5 +6,5 @@ interface DateChoiceListener {
 
     fun setDate(dayInfo: DayInfo)
 
-
+    fun setLabel(pickDate: String)
 }

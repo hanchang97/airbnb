@@ -1,8 +1,8 @@
 package com.team16.airbnb.ui.calendar
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.team16.airbnb.common.DateChoiceListener
 import com.team16.airbnb.data.model.CalendarData
 import com.team16.airbnb.data.model.DayInfo
 import com.team16.airbnb.data.repository.CalendarRepository
@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
-    private val calendarRepository: CalendarRepository
+    private val calendarRepository: CalendarRepository,
+    private val listener: DateChoiceListener
 ) : ViewModel() {
 
     private val _calendar = MutableStateFlow<List<CalendarData>>(emptyList())
@@ -35,21 +36,16 @@ class CalendarViewModel @Inject constructor(
     fun setDate(dayInfo: DayInfo) {
         when {
             startDate.day == "" && endDate.day == "" -> {
-                Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  _startDate.day == \"\" && _endDate.day == \"\"")
-
                 startDate = dayInfo
                 setPickDate()
+                setStartDateLabel(dayInfo)
             }
 
             startDate.day != "" && endDate.day == "" -> {
-                Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  _startDate.day != \"\" && _endDate.day == \"\"")
-
                 checkDate(dayInfo)
             }
 
             startDate.day != "" && endDate.day != "" -> {
-                Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  _startDate.day != \"\" && _endDate.day != \"\"")
-
                 setCancelDate()
             }
 
@@ -58,32 +54,27 @@ class CalendarViewModel @Inject constructor(
 
     private fun checkDate(dayInfo: DayInfo) = when {
         startDate.month >= dayInfo.month -> {
-            Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  checkDate")
-
             checkDay(dayInfo)
         }
 
         else -> {
-            Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  checkDate  else")
-            dayInfo.isEnd = true
             endDate = dayInfo
             setPickDate()
+            setEndDateLabel(dayInfo)
         }
     }
 
     private fun checkDay(dayInfo: DayInfo) = when (startDate.day.toInt() >= dayInfo.day.toInt()) {
 
         true -> {
-            Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  checkDay  true")
             startDate = DayInfo("", "")
             setCancelDate()
         }
 
         false -> {
-            Log.d("TAG", " _startDate = ${startDate.month} ${startDate.day} dayInfo = ${dayInfo.month} ${dayInfo.day}  checkDay  false")
-
             endDate = dayInfo
             setPickDate()
+            setEndDateLabel(dayInfo)
         }
 
     }
@@ -94,27 +85,48 @@ class CalendarViewModel @Inject constructor(
 
         list.forEach { data ->
             data.days.forEach {
-                if (it.month == startDate.month && it.day == startDate.day ||
-                    it.month == endDate.month && it.day == endDate.day
-                ) {
-                    it.isChoice = true
+                when {
+                    it.month == startDate.month && it.day == startDate.day -> {
+                        it.isStart = true
+                        it.isChoice = true
+                        it.isChecked = true
+                    }
+                    it.month == endDate.month && it.day == endDate.day -> {
+                        it.isChecked = true
+                        it.isEnd = true
+                        it.isChoice = true
+                    }
+                    startDate.month == it.month && startDate.day.dayToInt() <= it.day.dayToInt() && endDate.day.dayToInt() >= it.day.dayToInt() -> {
+                        it.isChecked = true
+                    }
                 }
             }
         }
         _calendar.value = list
     }
 
+    private fun String.dayToInt() =
+        when(this != "") {
+            true -> this.toInt()
+            false -> -1
+        }
 
 
     private fun setCancelDate() {
         val list = getCopyList()
         list.forEach { data ->
             data.days.forEach {
-                it.isChoice = false
+                it.apply {
+                    isChoice = false
+                    isStart = false
+                    isEnd = false
+                    isChecked = false
+                }
             }
         }
         startDate = DayInfo("", "")
         endDate = DayInfo("", "")
+
         _calendar.value = list
     }
 
@@ -129,4 +141,13 @@ class CalendarViewModel @Inject constructor(
         }
         return list
     }
+
+    private fun setStartDateLabel(startDate: DayInfo) {
+        listener.setLabel("${startDate.month}월 ${startDate.day}일")
+    }
+
+    private fun setEndDateLabel(endDate: DayInfo) {
+        listener.setLabel("${startDate.month}월 ${startDate.day}일 - ${endDate.month}월 ${endDate.day}일")
+    }
+
 }

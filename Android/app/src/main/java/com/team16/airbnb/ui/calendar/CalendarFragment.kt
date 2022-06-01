@@ -52,4 +52,8 @@ class CalendarFragment : Fragment(), DateChoiceListener {
         calendarViewModel.setDate(dayInfo)
     }
 
+    override fun setLabel(pickDate: String) {
+        binding.label = pickDate
+    }
+
 }

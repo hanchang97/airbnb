@@ -22,7 +22,6 @@ class DayAdapter(private val listener: DateChoiceListener): ListAdapter<DayInfo,
 
     inner class DayViewHolder(private val binding: ItemDaysBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(dayInfo: DayInfo) {
-            Log.d("TAG", "${dayInfo.day}")
             binding.item = dayInfo
             setOnClickItem(dayInfo)
         }

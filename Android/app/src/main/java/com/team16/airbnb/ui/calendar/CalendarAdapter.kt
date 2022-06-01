@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.team16.airbnb.common.CalendarGridSpace
 import com.team16.airbnb.common.DateChoiceListener
 import com.team16.airbnb.data.model.CalendarData
 import com.team16.airbnb.databinding.ItemCalendarBinding
@@ -32,6 +33,7 @@ class CalendarAdapter(private val listener: DateChoiceListener): ListAdapter<Cal
             binding.tvCalendarDay.apply {
                 adapter = dayAdapter
                 layoutManager = lm
+                addItemDecoration(CalendarGridSpace(0, 0, 0, 0))
             }
 
             dayAdapter.submitList(calendarData.days)
