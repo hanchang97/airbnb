@@ -13,7 +13,7 @@ import com.team16.airbnb.data.model.DayInfo
 @BindingAdapter("dayCheck")
 fun isBeforeDay(dayView: TextView, item: DayInfo) {
     dayView.text = item.day
-    Log.e("TAG", "item.isPossible ${item.isPossible} day = ${item.day}")
+
     when {
         !item.isPossible -> {
             dayView.setTextColor(Color.parseColor("#828282") )
@@ -58,11 +58,6 @@ fun isBeforeDay(dayView: TextView, item: DayInfo) {
                 background = null
             }
         }
-
-    }
-
-    @BindingAdapter("pickDate")
-    fun bindPickDateLabel(textView: TextView, item: String) {
 
     }
 

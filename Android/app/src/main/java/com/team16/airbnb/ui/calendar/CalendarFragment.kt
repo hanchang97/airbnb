@@ -21,7 +21,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CalendarFragment : Fragment(), DateChoiceListener {
 
-    private lateinit var binding: FragmentCalendarBinding
+    private val binding: FragmentCalendarBinding by lazy {
+        FragmentCalendarBinding.inflate(layoutInflater)
+    }
 
     private val calendarViewModel: CalendarViewModel by viewModels()
 
@@ -29,7 +31,6 @@ class CalendarFragment : Fragment(), DateChoiceListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCalendarBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -46,14 +47,18 @@ class CalendarFragment : Fragment(), DateChoiceListener {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                calendarViewModel.label.collect {
+                    binding.label = it
+                }
+            }
+        }
     }
 
     override fun setDate(dayInfo: DayInfo) {
         calendarViewModel.setDate(dayInfo)
-    }
-
-    override fun setLabel(pickDate: String) {
-        binding.label = pickDate
     }
 
 }

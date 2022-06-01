@@ -1,11 +1,9 @@
 package com.team16.airbnb.data.datasource
 
-import android.util.Log
 import com.team16.airbnb.data.model.CalendarData
 import com.team16.airbnb.data.model.DayInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.forEach
 import java.util.*
 import javax.inject.Inject
 
@@ -13,7 +11,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
 
     private var todayMonth: Int = -1
     private var today: Int = -1
-
+    private var id: Int = 0
 
     override fun getCalendar(): Flow<List<CalendarData>> = flow {
         val cal = Calendar.getInstance()
@@ -37,7 +35,6 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                     setDays(year, month)
                 )
             )
-            Log.d("TAG", "${year}년 ${month}월")
             month++
         }
         emit(list)
@@ -66,7 +63,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                         setPickDay(year, month, startDate, endDate)
                     )
                 )
-                Log.d("TAG", " $i ${year}년 ${month}월")
+
                 month++
             }
             emit(list)
@@ -79,7 +76,8 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
         val days = mutableListOf<DayInfo>()
 
         for (i in 1 until start) {
-            days.add(DayInfo(" ", " ", isPossible = false))
+            days.add(DayInfo(id," ", " ", isPossible = false))
+            id++
         }
 
         for (i in 1..cal.getActualMaximum(Calendar.DATE)) {
@@ -87,21 +85,25 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                 true -> {
                     days.add(
                         DayInfo(
+                            id = id,
                             day = "$i",
                             month = "$month",
                             isPossible = setIsPossible(today, i)
                         )
                     )
+                    id++
                 }
 
                 false -> {
                     days.add(
                         DayInfo(
+                            id = id,
                             day = "$i",
                             month = "$month",
                             isPossible = true
                         )
                     )
+                    id++
                 }
             }
 
@@ -123,7 +125,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
         val days = mutableListOf<DayInfo>()
 
         for (i in 1 until start) {
-            days.add(DayInfo(" ", " ", isPossible = false))
+            days.add(DayInfo(day= "", month = "", isPossible = false))
         }
 
         for (i in 1..cal.getActualMaximum(Calendar.DATE)) {
@@ -131,6 +133,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                 true -> {
                     days.add(
                         DayInfo(
+                            id = id,
                             day = "$i",
                             month = "$month",
                             isPossible = setIsPossible(today, i),
@@ -144,11 +147,13 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                             )
                         )
                     )
+                    id++
                 }
 
                 false -> {
                     days.add(
                         DayInfo(
+                            id = id,
                             day = "$i",
                             month = "$month",
                             isPossible = true,
@@ -162,6 +167,7 @@ class CalendarDataSourceImpl @Inject constructor() : CalendarDataSource {
                             )
                         )
                     )
+                    id++
                 }
             }
 
