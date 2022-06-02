@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
@@ -22,28 +23,37 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CalendarFragment : Fragment(), DateChoiceListener {
 
-    private val binding: FragmentCalendarBinding by lazy {
-        FragmentCalendarBinding.inflate(layoutInflater)
-    }
+    private lateinit var binding: FragmentCalendarBinding
 
-    private val calendarViewModel: CalendarViewModel by viewModels()
+    private val calendarViewModel: CalendarViewModel by activityViewModels()
+
+    private lateinit var calendarAdapter: CalendarAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentCalendarBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val calendarAdapter = CalendarAdapter(this)
+        calendarAdapter = CalendarAdapter(this)
 
         binding.rvCalendar.apply {
             adapter = calendarAdapter
         }
+        setCalendar()
+        setCalendarLabel()
 
+    }
+
+    override fun setDate(dayInfo: DayInfo) {
+        calendarViewModel.setDate(dayInfo)
+    }
+
+    private fun setCalendar() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 calendarViewModel.calendar.collect {
@@ -51,7 +61,9 @@ class CalendarFragment : Fragment(), DateChoiceListener {
                 }
             }
         }
+    }
 
+    private fun setCalendarLabel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 calendarViewModel.label.collect {
@@ -59,11 +71,6 @@ class CalendarFragment : Fragment(), DateChoiceListener {
                 }
             }
         }
-
-    }
-
-    override fun setDate(dayInfo: DayInfo) {
-        calendarViewModel.setDate(dayInfo)
     }
 
 }
