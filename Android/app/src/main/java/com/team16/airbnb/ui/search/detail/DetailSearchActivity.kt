@@ -90,9 +90,6 @@ class DetailSearchActivity : AppCompatActivity() {
             when(currentView > 2) {
                 true -> {
                     val intent = Intent(this, MainActivity::class.java)
-                    //sealed class로 묶어서 homefragment 변경
-                    //intent에 지역, 날짜, 인원을 그냥 보여주기 용으로 갖을것인가 값을 가질 것인가
-                    //
                     //startActivity(intent)
                     setResult(RESULT_OK, intent)
                     finish()
