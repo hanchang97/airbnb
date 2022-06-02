@@ -30,7 +30,9 @@ class DayAdapter(
 
         private fun setOnClickItem(dayInfo: DayInfo) {
             itemView.setOnClickListener {
-                listener.setDate(dayInfo)
+                if(dayInfo.isPossible) {
+                    listener.setDate(dayInfo)
+                }
             }
         }
     }

@@ -23,9 +23,14 @@ class CalendarViewModel @Inject constructor(
     private val _label = MutableStateFlow("")
     val label: StateFlow<String> = _label
 
+    private val _pickState = MutableStateFlow(false)
+    val pickState: StateFlow<Boolean> = _pickState
+
     private var startDate = DayInfo(day = "", month = "")
 
     private var endDate = DayInfo(day = "", month = "")
+
+
 
     init {
         viewModelScope.launch {
@@ -64,6 +69,7 @@ class CalendarViewModel @Inject constructor(
 
         else -> {
             endDate = dayInfo
+            _pickState.value = true
             setPickDate()
             setEndDateLabel(dayInfo)
         }
@@ -91,6 +97,7 @@ class CalendarViewModel @Inject constructor(
             endDate = dayInfo
             setPickDate()
             setEndDateLabel(dayInfo)
+            _pickState.value = true
         }
 
     }
@@ -107,7 +114,7 @@ class CalendarViewModel @Inject constructor(
             }
 
             data.days[endDate.id]?.apply {
-                isStart = true
+                isEnd = true
                 isChoice = true
                 isChecked = true
             }
@@ -121,7 +128,7 @@ class CalendarViewModel @Inject constructor(
     }
 
 
-    private fun setCancelDate() {
+    fun setCancelDate() {
         val list = getCopyList()
 
         list.forEach { data ->
@@ -137,7 +144,7 @@ class CalendarViewModel @Inject constructor(
         }
         startDate = DayInfo(day = "", month = "")
         endDate = DayInfo(day = "", month = "")
-
+        _pickState.value = false
         _calendar.value = list
     }
 
