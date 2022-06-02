@@ -3,6 +3,7 @@ package yanse.airbnb.domain.room;
 
 import static javax.persistence.FetchType.LAZY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -14,9 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +22,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yanse.airbnb.domain.image.RoomImage;
 import yanse.airbnb.domain.member.Members;
-import yanse.airbnb.web.dto.RoomDto;
 import yanse.airbnb.domain.reservation.Reservation;
 
 @Getter
@@ -43,6 +40,7 @@ public class Room {
 
 	private String roomName;
 
+	//TODO : members클래스가 아닌 host클래스 및 guest클래스 생성해서 나눌 수 있도록 변경
 	@JsonIgnore
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "members_id")
@@ -54,7 +52,6 @@ public class Room {
 
 	private int reviewCount;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "room")
 	private List<RoomImage> roomImage = new ArrayList<>();
 

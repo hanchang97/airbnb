@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yanse.airbnb.domain.image.Image;
-import yanse.airbnb.domain.image.ImageRepository;
+import yanse.airbnb.domain.image.repository.ImageRepository;
 import yanse.airbnb.type.ImageType;
 import yanse.airbnb.web.dto.ImageListDto;
 

@@ -9,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +28,6 @@ public class RoomImage {
 
     private String url;
 
-    @JsonBackReference
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "room_id")
     private Room room;

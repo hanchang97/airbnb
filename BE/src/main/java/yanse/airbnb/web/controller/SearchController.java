@@ -29,7 +29,8 @@ public class SearchController {
 	public RoomDto searchRoomDetail(@PathVariable("id") Long id){
 		return searchService.findRoomDetail(id);
 	}
-	@GetMapping("/room_list")
+
+	@GetMapping("/rooms")
 	public List<ResponseRoomDto> searchRoomList(RequestRoomSearchDto dto) {
 		return searchService.findCardRoomList(dto);
 	}

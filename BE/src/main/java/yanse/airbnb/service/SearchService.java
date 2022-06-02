@@ -5,13 +5,13 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yanse.airbnb.domain.image.repository.RoomImageRepository;
+import yanse.airbnb.domain.room.Room;
 import yanse.airbnb.domain.room.repository.RoomRepository;
 import yanse.airbnb.web.dto.RequestRoomSearchDto;
 import yanse.airbnb.web.dto.ResponseRoomDto;
-import yanse.airbnb.domain.image.RoomImage;
-import yanse.airbnb.domain.image.RoomImageRepository;
-import yanse.airbnb.domain.room.Room;
 import yanse.airbnb.web.dto.RoomDto;
+import yanse.airbnb.web.dto.RoomImageListDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -28,9 +28,10 @@ public class SearchService {
 	public RoomDto findRoomDetail(Long id){
 		//TODO custom 예외처리
 		Room room = roomRepository.findById(id).orElseThrow(RuntimeException::new);
-		List<RoomImage> roomImages = roomImageRepository.findAllByRoomId(id);
-		return new RoomDto(room, roomImages);
-
+		List<RoomImageListDto> roomImageListDtos = roomImageRepository.findAllByRoomId(id).stream()
+			.map(RoomImageListDto::new)
+			.collect(Collectors.toList());
+		return new RoomDto(room, roomImageListDtos);
 	}
 
 	public List<ResponseRoomDto> findCardRoomList(RequestRoomSearchDto dto) {
