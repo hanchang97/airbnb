@@ -19,10 +19,4 @@ public class RoomImageListDto {
 		url = roomImage.getUrl();
 	}
 
-	public RoomImage toEntity() {
-		return RoomImage.builder()
-			.id(id)
-			.url(url)
-			.build();
-	}
 }
