@@ -1,5 +1,6 @@
 package yanse.airbnb.domain.room.repository;
 
+import static yanse.airbnb.domain.image.QRoomImage.*;
 import static yanse.airbnb.domain.reservation.QReservation.*;
 import static yanse.airbnb.domain.room.QRoom.*;
 
@@ -9,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
+import yanse.airbnb.domain.image.QRoomImage;
 import yanse.airbnb.domain.room.Room;
 import yanse.airbnb.web.dto.RequestRoomSearchDto;
 
@@ -34,7 +36,8 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 		return query
 			.select(room)
 			.from(room)
-			.leftJoin(reservation).on(room.id.eq(reservation.id))
+			.leftJoin(room.reservationList, reservation)
+			.join(room.roomImage, roomImage).fetchJoin()
 			.where(getAddressContains(dto.getAddress()),
 				validCheckInOutTime(dto.getCheckIn(), dto.getCheckOut()),
 				validPrice(dto.getMinPrice(), dto.getMaxPrice()),
