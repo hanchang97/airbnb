@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import yanse.airbnb.type.ImageType;
+import yanse.airbnb.web.dto.ImageListDto;
 
 @Entity
 @Getter
@@ -27,5 +28,9 @@ public class Image {
 	private String title;
 
 	private String content;
+
+	public ImageListDto toImageListDTO(){
+		return new ImageListDto(url, title, content);
+	}
 
 }

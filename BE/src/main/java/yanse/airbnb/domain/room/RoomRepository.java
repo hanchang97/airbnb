@@ -1,6 +1,8 @@
 package yanse.airbnb.domain.room;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +15,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 		+ "where r.address.city like %:address% or r.address.region like %:address% "
 		+ "or r.address.district like %:address% or r.address.detail like %:address%")
 	List<ResponseSearchAddressDto> findByAddress(@Param("address") String address);
+
+	Optional<Room> findById(@Param("id") Long id);
 }

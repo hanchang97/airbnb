@@ -1,15 +1,14 @@
 package yanse.airbnb.domain.room;
 
 import javax.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@Getter
 public class Address {
 
 	private String city;
