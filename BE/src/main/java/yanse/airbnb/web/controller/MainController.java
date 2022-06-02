@@ -9,6 +9,7 @@ import yanse.airbnb.service.MainService;
 import yanse.airbnb.web.dto.ImageListDto;
 
 import java.util.List;
+import yanse.airbnb.web.dto.ResponseDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class MainController {
     private final MainService mainService;
 
     @GetMapping
-    public List<ImageListDto> mainImageType(@RequestParam("type") String imageType){
-        return mainService.findAllByImage(imageType);
+    public ResponseDto<ImageListDto> mainImageType(@RequestParam("type") String imageType){
+        return new ResponseDto<>(mainService.findAllByImage(imageType));
     }
 }
