@@ -1,6 +1,5 @@
-
-insert into image (content, image_type, title, url) values ('content', 'HERO', 'title', 'url'),
-                                                           ('content', 'AROUND', 'title', 'url');
+insert into image (content, image_type, title, url) values ('content', 'hero', 'title', 'url'),
+                                                           ('content', 'around', 'title', 'url');
 
 insert into members (email, members_name, members_image) values ('google', 'hanse', 'imageUrl');
 
@@ -28,5 +27,11 @@ insert into reservation (adult_count, child_count, infant_count, check_in_date_t
                          cleaning_fee, discount_policy, room_tax, service_tax, reservation_price,
                          members_id, room_id)
 values (2, 1, 0, '2022-05-30', '2022-06-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 1, 1);
+
+insert into reservation (adult_count, child_count, infant_count, check_in_date_time, check_out_date_time,
+                         cleaning_fee, discount_policy, room_tax, service_tax, reservation_price,
+                         members_id, room_id)
+values (2, 1, 0, '2022-05-30', '2022-06-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 1, 2);
+
 
 insert into wish (members_id, room_id) values (1, 1);

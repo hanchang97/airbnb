@@ -1,12 +1,16 @@
 package yanse.airbnb.domain.room.repository;
 
+import static yanse.airbnb.domain.reservation.QReservation.*;
 import static yanse.airbnb.domain.room.QRoom.*;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
+import yanse.airbnb.domain.room.Room;
+import yanse.airbnb.web.dto.RequestRoomSearchDto;
 
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
@@ -23,6 +27,34 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 			.from(room)
 			.where(getAddressContains(address))
 			.fetch();
+	}
+
+	@Override
+	public List<Room> findRoomList(RequestRoomSearchDto dto) {
+		return query
+			.select(room)
+			.from(room)
+			.leftJoin(reservation).on(room.id.eq(reservation.id))
+			.where(getAddressContains(dto.getAddress()),
+				validCheckInOutTime(dto.getCheckIn(), dto.getCheckOut()),
+				validPrice(dto.getMinPrice(), dto.getMaxPrice()),
+				validGuestCount(dto.checkInGuest())
+			)
+			.fetch();
+	}
+
+	private BooleanExpression validGuestCount(int guest) {
+		return room.roomInfo.maxGuest.goe(guest);
+	}
+
+	private BooleanExpression validPrice(int minPrice, int maxPrice) {
+		return room.price.between(minPrice, maxPrice);
+	}
+
+	private BooleanExpression validCheckInOutTime(LocalDate checkIn, LocalDate checkOut) {
+		return room.reservationList.isEmpty()
+				.or(reservation.checkOutDateTime.loe(checkIn.atStartOfDay())
+				.or(reservation.checkInDateTime.goe(checkOut.atStartOfDay())));
 	}
 
 	private BooleanExpression getAddressContains(String address) {

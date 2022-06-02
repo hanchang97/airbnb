@@ -1,7 +1,7 @@
 package yanse.airbnb.domain.room;
 
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +25,17 @@ import lombok.NoArgsConstructor;
 import yanse.airbnb.domain.image.RoomImage;
 import yanse.airbnb.domain.member.Members;
 import yanse.airbnb.web.dto.RoomDto;
+import yanse.airbnb.domain.reservation.Reservation;
 
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Room {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "room_id")
 	private Long id;
 
@@ -60,4 +63,7 @@ public class Room {
 
 	@Embedded
 	private RoomInfo roomInfo;
+
+	@OneToMany(mappedBy = "room")
+	private List<Reservation> reservationList = new ArrayList<>();
 }

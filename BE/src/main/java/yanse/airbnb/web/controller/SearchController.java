@@ -1,7 +1,7 @@
 package yanse.airbnb.web.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,6 @@ import yanse.airbnb.web.dto.RoomDto;
 @RequestMapping("/search")
 @RequiredArgsConstructor
 @RestController
-@Slf4j
 public class SearchController {
 
 	private final SearchService searchService;
@@ -31,8 +30,7 @@ public class SearchController {
 		return searchService.findRoomDetail(id);
 	}
 	@GetMapping("/room_list")
-	public ResponseDto<ResponseRoomDto> searchRoomList(RequestRoomSearchDto dto) {
-		log.info("result ={}", dto);
-		return new ResponseDto<>();
+	public List<ResponseRoomDto> searchRoomList(RequestRoomSearchDto dto) {
+		return searchService.findCardRoomList(dto);
 	}
 }
