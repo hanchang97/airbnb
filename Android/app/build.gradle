@@ -95,4 +95,7 @@ dependencies {
 
     //Coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+
+    // for price chart
+    implementation "com.github.stfalcon-studio:StfalconPriceRangeBar-android:v1.5"
 }

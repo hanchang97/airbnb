@@ -14,6 +14,13 @@
         android:layout_height="match_parent"
         tools:context=".MoneyRangeFragment">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_v_4.44"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.0444"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clo_day_label"
             android:layout_width="match_parent"
@@ -50,6 +57,84 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/empty_view_1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/clo_day_label"
+            app:layout_constraintDimensionRatio="360:12"/>
+
+        <TextView
+            android:id="@+id/tv_description_price_average"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/empty_view_1"
+            app:layout_constraintStart_toStartOf="@id/gl_v_4.44"
+            tools:text="평균 1박 요금은 ₩128,912 입니다."
+            style="@style/Text_Grey3.12"/>
+
+        <View
+            android:id="@+id/empty_view_2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_description_price_average"
+            app:layout_constraintDimensionRatio="360:50"/>
+
+        <com.stfalcon.pricerangebar.RangeBarWithChart
+            android:id="@+id/rangeBarWithChart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/empty_view_2"/>
+
+        <View
+            android:id="@+id/empty_view_3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/rangeBarWithChart"
+            app:layout_constraintDimensionRatio="360:40"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_leftpin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/empty_view_3"
+            app:layout_constraintWidth_percent="0.9">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_leftpin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="최저 요금"
+                android:textColor="#333333"
+                android:textColorHint="#4F4F4F" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_rightpin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_leftpin"
+            app:layout_constraintWidth_percent="0.9">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_rightpin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="최고 요금"
+                android:textColor="#333333"
+                android:textColorHint="#4F4F4F" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

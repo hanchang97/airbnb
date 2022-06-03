@@ -1,59 +1,63 @@
 package com.team16.airbnb
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import com.stfalcon.pricerangebar.model.BarEntry
+import com.team16.airbnb.databinding.FragmentHomeBinding
+import com.team16.airbnb.databinding.FragmentMoneyRangeBinding
+import java.util.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MoneyRangeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MoneyRangeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentMoneyRangeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_money_range, container, false)
+        Log.d("AppTest", "MoneyRangeFragment/ onCreateView")
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_money_range, container, false)
+        val view = binding.root
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MoneyRangeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MoneyRangeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("AppTest", "MoneyRangeFragment/ onViewCreated")
+
+        val chartList = ArrayList<BarEntry>()
+
+        for(i in 1..20){
+            val end = i * 50000f - 3000f
+            val start = end - 44000f
+
+            val count = (1..30).random().toFloat()
+
+            chartList.add(BarEntry(start, 0f))
+            chartList.add(BarEntry(start, count))
+            chartList.add(BarEntry(end, count))
+            chartList.add(BarEntry(end, 0f))
+
+        }
+
+        binding.rangeBarWithChart.setEntries(chartList)
+
+        binding.rangeBarWithChart.onLeftPinChanged = { index, leftPinValue ->
+            Log.d("AppTest", "leftpin / index : ${index}, value : ${leftPinValue}")
+            binding.tietLeftpin.setText(leftPinValue.toString())
+        }
+        binding.rangeBarWithChart.onRightPinChanged = { index, rightPinValue ->
+            Log.d("AppTest", "rightpin / index : ${index}, value : ${rightPinValue}")
+            binding.tietRightpin.setText(rightPinValue.toString())
+        }
     }
+
+
 }
