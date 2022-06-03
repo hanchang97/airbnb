@@ -38,6 +38,7 @@ class CalendarAdapter(
     }
 
     private object CalendarDiffUtil: DiffUtil.ItemCallback<CalendarData>() {
+
         override fun areItemsTheSame(oldItem: CalendarData, newItem: CalendarData) =
         oldItem.header == newItem.header
 
