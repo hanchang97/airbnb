@@ -3,6 +3,7 @@ package com.team16.airbnb.ui.search.detail
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
@@ -52,6 +53,11 @@ class DetailSearchActivity : AppCompatActivity() {
         setCalendarPickDateState()
         setSkip()
         setRemove()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean { // 지정한 메뉴 레이아웃을 현재 툴바의 메뉴로 설정
+        menuInflater.inflate(R.menu.detail_search_menu, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
