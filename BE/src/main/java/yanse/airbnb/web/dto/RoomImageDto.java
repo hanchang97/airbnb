@@ -8,13 +8,13 @@ import yanse.airbnb.domain.image.RoomImage;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomImageListDto {
+public class RoomImageDto {
 
 	private Long id;
 
 	private String url;
 
-	public RoomImageListDto(RoomImage roomImage) {
+	public RoomImageDto(RoomImage roomImage) {
 		id = roomImage.getId();
 		url = roomImage.getUrl();
 	}

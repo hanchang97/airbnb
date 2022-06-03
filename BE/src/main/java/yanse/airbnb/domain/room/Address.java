@@ -4,7 +4,6 @@ import javax.persistence.Embeddable;
 
 import lombok.*;
 
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
@@ -12,7 +11,10 @@ import lombok.*;
 public class Address {
 
 	private String city;
+
 	private String region;
+
 	private String district;
+
 	private String detail;
 }

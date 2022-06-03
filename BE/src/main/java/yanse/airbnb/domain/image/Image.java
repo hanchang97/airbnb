@@ -10,13 +10,14 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import yanse.airbnb.type.ImageType;
-import yanse.airbnb.web.dto.ImageListDto;
+import yanse.airbnb.web.dto.ImageDto;
 
 @Entity
 @Getter
 public class Image {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "image_id")
 	private Long id;
 
@@ -29,8 +30,8 @@ public class Image {
 
 	private String content;
 
-	public ImageListDto toImageListDTO(){
-		return new ImageListDto(url, title, content);
+	public ImageDto toImageListDTO() {
+		return new ImageDto(url, title, content);
 	}
 
 }

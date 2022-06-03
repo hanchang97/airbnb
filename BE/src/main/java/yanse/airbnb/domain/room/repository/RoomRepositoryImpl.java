@@ -9,6 +9,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import yanse.airbnb.domain.image.QRoomImage;
 import yanse.airbnb.domain.room.Room;
@@ -43,7 +44,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 				validPrice(dto.getMinPrice(), dto.getMaxPrice()),
 				validGuestCount(dto.checkInGuest())
 			)
-			.fetch();
+			.fetch().stream().distinct().collect(Collectors.toList());
 	}
 
 	private BooleanExpression validGuestCount(int guest) {
@@ -56,7 +57,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
 	private BooleanExpression validCheckInOutTime(LocalDate checkIn, LocalDate checkOut) {
 		return room.reservationList.isEmpty()
-				.or(reservation.checkOutDateTime.loe(checkIn.atStartOfDay())
+			.or(reservation.checkOutDateTime.loe(checkIn.atStartOfDay())
 				.or(reservation.checkInDateTime.goe(checkOut.atStartOfDay())));
 	}
 
