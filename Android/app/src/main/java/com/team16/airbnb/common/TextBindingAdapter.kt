@@ -11,7 +11,7 @@ import com.team16.airbnb.data.model.DayInfo
 
 @SuppressLint("UseCompatLoadingForDrawables")
 @BindingAdapter("dayCheck")
-fun isBeforeDay(dayView: TextView, item: DayInfo) {
+fun setCheckInCheckOutRange(dayView: TextView, item: DayInfo) {
     dayView.text = item.day
 
     when {
