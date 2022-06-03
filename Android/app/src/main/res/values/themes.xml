@@ -15,4 +15,9 @@
 
         <item name="colorControlActivated">@color/airbnb_Black</item>
     </style>
+
+    <style name="Theme.Airbnb.FullScreen">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+    
 </resources>
