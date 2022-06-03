@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageListDto {
+public class ImageDto {
     private String imageUrl;
     private String title;
     private String content;

@@ -11,7 +11,7 @@ import yanse.airbnb.domain.room.repository.RoomRepository;
 import yanse.airbnb.web.dto.RequestRoomSearchDto;
 import yanse.airbnb.web.dto.ResponseRoomDto;
 import yanse.airbnb.web.dto.RoomDto;
-import yanse.airbnb.web.dto.RoomImageListDto;
+import yanse.airbnb.web.dto.RoomImageDto;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,18 +25,18 @@ public class SearchService {
 		return roomRepository.findByAddress(address);
 	}
 
-	public RoomDto findRoomDetail(Long id){
+	public RoomDto findRoomDetail(Long id) {
 		//TODO custom 예외처리
 		Room room = roomRepository.findById(id).orElseThrow(RuntimeException::new);
-		List<RoomImageListDto> roomImageListDtos = roomImageRepository.findAllByRoomId(id).stream()
-			.map(RoomImageListDto::new)
+		List<RoomImageDto> roomImageDtos = roomImageRepository.findAllByRoomId(id).stream()
+			.map(RoomImageDto::new)
 			.collect(Collectors.toList());
-		return new RoomDto(room, roomImageListDtos);
+		return new RoomDto(room, roomImageDtos);
 	}
 
 	public List<ResponseRoomDto> findCardRoomList(RequestRoomSearchDto dto) {
 		return roomRepository.findRoomList(dto).stream()
-				.map(room -> new ResponseRoomDto(room, dto.Days()))
-				.collect(Collectors.toList());
+			.map(room -> new ResponseRoomDto(room, dto.Days()))
+			.collect(Collectors.toList());
 	}
 }
