@@ -1,4 +1,4 @@
-package com.team16.airbnb.ui
+package com.team16.airbnb.ui.mybook
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

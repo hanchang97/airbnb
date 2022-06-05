@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.team16.airbnb.ui.HomeFragment"
+        android:name="com.team16.airbnb.ui.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
@@ -15,11 +15,11 @@
     </fragment>
     <fragment
         android:id="@+id/myBookFragment"
-        android:name="com.team16.airbnb.ui.MyBookFragment"
+        android:name="com.team16.airbnb.ui.mybook.MyBookFragment"
         android:label="MyBookFragment" />
     <fragment
         android:id="@+id/wishFragment"
-        android:name="com.team16.airbnb.ui.WishFragment"
+        android:name="com.team16.airbnb.ui.wish.WishFragment"
         android:label="WishFragment" />
     <fragment
         android:id="@+id/searchFragment"

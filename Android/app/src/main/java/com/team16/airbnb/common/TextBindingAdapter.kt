@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.team16.airbnb.R
 import com.team16.airbnb.data.model.DayInfo
+import java.text.DecimalFormat
 
 @SuppressLint("UseCompatLoadingForDrawables")
 @BindingAdapter("dayCheck")
@@ -68,6 +69,13 @@ fun setCheckInCheckOutRange(dayView: TextView, item: DayInfo) {
 @BindingAdapter("reviewCount")
 fun setReviewCount(textView: TextView, count: Int) {
     "(후기 ${count}개)".also { textView.text = it }
+}
+
+@BindingAdapter("moneyFormat")
+fun setMoneyFormat(textView: TextView, money: Int) {
+    val format = DecimalFormat("₩#,###")
+    val money = format.format(money.toLong())
+    textView.text = money
 }
 
 
