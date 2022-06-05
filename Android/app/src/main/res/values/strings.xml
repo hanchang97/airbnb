@@ -19,4 +19,6 @@
     <string name="skip">건너뛰기</string>
     <string name="person_label">인원 입력</string>
     <string name="money_label">가격 범위</string>
+
+    <string name="money_label_string">₩%s - ₩%s</string>
 </resources>
