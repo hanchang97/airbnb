@@ -75,7 +75,7 @@ fun setReviewCount(textView: TextView, count: Int) {
 fun setMoneyFormat(textView: TextView, money: Int) {
     val format = DecimalFormat("₩#,###")
     val money = format.format(money.toLong())
-    textView.text = money
+    textView.text = "$money / 박"
 }
 
 
