@@ -65,4 +65,9 @@ fun setCheckInCheckOutRange(dayView: TextView, item: DayInfo) {
 
 }
 
+@BindingAdapter("reviewCount")
+fun setReviewCount(textView: TextView, count: Int) {
+    "(후기 ${count}개)".also { textView.text = it }
+}
+
 

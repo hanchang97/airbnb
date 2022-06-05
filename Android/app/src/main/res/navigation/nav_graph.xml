@@ -27,7 +27,7 @@
         android:label="SearchFragment" />
     <fragment
         android:id="@+id/searchResultFragment"
-        android:name="com.team16.airbnb.SearchResultFragment"
+        android:name="com.team16.airbnb.ui.search.SearchResultFragment"
         android:label="fragment_search_result"
         tools:layout="@layout/fragment_search_result" />
 </navigation>
