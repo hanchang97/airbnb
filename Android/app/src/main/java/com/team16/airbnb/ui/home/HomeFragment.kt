@@ -1,4 +1,4 @@
-package com.team16.airbnb.ui
+package com.team16.airbnb.ui.home
 
 import android.os.Bundle
 import android.util.Log

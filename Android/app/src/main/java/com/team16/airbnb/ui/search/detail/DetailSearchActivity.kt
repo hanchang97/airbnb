@@ -30,8 +30,6 @@ class DetailSearchActivity : AppCompatActivity() {
 
     private val calendarViewModel: CalendarViewModel by viewModels()
 
-//    private lateinit var navController: NavController
-
     private val fragmentList = listOf(CalendarFragment(), MoneyRangeFragment(), PersonFragment())
 
     private var currentView = 0
@@ -45,11 +43,7 @@ class DetailSearchActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.detail_nav_host) as NavHostFragment
-//        navController = navHostFragment.navController
-
         setFragment()
-
         setCalendarPickDateState()
         setSkip()
         setRemove()
