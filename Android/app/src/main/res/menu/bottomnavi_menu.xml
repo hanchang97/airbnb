@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_search_unselect"
+        android:title="@string/label_search" />
+
+    <item
+        android:id="@+id/wishFragment"
+        android:icon="@drawable/ic_wish_unselect"
+        android:title="@string/label_wish" />
+
+    <item
+        android:id="@+id/myBookFragment"
+        android:icon="@drawable/ic_my_unselect"
+        android:title="@string/label_my" />
+
+</menu>
