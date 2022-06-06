@@ -26,5 +26,18 @@ class RoomDetailActivity: AppCompatActivity() {
 
         // 2. FullScreenTheme 스타일 정의 후 매니페스트에서 해당 액티비티의 theme 에 설정하기!!
 
+        setReservationButton()
+        setDetailInfoButton()
+    }
+
+    private fun setReservationButton(){
+        // 예약 상세 정보 dialog fragment
+        binding.btnReserve.setOnClickListener {
+
+        }
+    }
+
+    private fun setDetailInfoButton(){
+        // 날짜 정보위해 캘린더 화면 이동하기
     }
 }
