@@ -33,7 +33,8 @@ class RoomDetailActivity: AppCompatActivity() {
     private fun setReservationButton(){
         // 예약 상세 정보 dialog fragment
         binding.btnReserve.setOnClickListener {
-
+            val reservationDialog = ReservationInfoDialogFragment()
+            reservationDialog.show(supportFragmentManager, "reservationDialog")
         }
     }
 
