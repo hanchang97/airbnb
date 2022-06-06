@@ -16,7 +16,11 @@
     <fragment
         android:id="@+id/myBookFragment"
         android:name="com.team16.airbnb.ui.mybook.MyBookFragment"
-        android:label="MyBookFragment" />
+        android:label="MyBookFragment" >
+        <action
+            android:id="@+id/action_myBookFragment_to_detailMyBookFragment"
+            app:destination="@id/detailMyBookFragment" />
+    </fragment>
     <fragment
         android:id="@+id/wishFragment"
         android:name="com.team16.airbnb.ui.wish.WishFragment"
@@ -30,4 +34,8 @@
         android:name="com.team16.airbnb.ui.search.SearchResultFragment"
         android:label="fragment_search_result"
         tools:layout="@layout/fragment_search_result" />
+    <fragment
+        android:id="@+id/detailMyBookFragment"
+        android:name="com.team16.airbnb.ui.mybook.detail.DetailMyBookFragment"
+        android:label="DetailMyBookFragment" />
 </navigation>
