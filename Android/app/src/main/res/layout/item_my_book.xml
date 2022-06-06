@@ -16,13 +16,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintDimensionRatio="328:150"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent="0.9"
-            imageUrl="@{item.imageThumnail}"
             tools:src="@drawable/ic_launcher_background"
             />
+
+        <!-- imageUrl="@{item.imageThumnail}" 일단 빼둠 -->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
