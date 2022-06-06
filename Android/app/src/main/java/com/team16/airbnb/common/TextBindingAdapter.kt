@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.team16.airbnb.R
 import com.team16.airbnb.data.model.DayInfo
+import com.team16.airbnb.data.model.MyBookData
 import java.text.DecimalFormat
 
 @SuppressLint("UseCompatLoadingForDrawables")
@@ -18,7 +19,7 @@ fun setCheckInCheckOutRange(dayView: TextView, item: DayInfo) {
     when {
 
         !item.isPossible -> {
-            dayView.setTextColor(Color.parseColor("#828282") )
+            dayView.setTextColor(Color.parseColor("#828282"))
         }
 
         item.isChoice && item.isPossible && !item.isChecked -> {
@@ -75,14 +76,25 @@ fun setReviewCount(textView: TextView, count: Int) {
 fun setMoneyFormat(textView: TextView, money: Int) {
     val format = DecimalFormat("₩#,###")
     val money = format.format(money.toLong())
-    textView.text = "$money / 박"
+    "$money / 박".also { textView.text = it }
 }
 
 @BindingAdapter("totalMoneyFormat")
 fun setTotalMoneyFormat(textView: TextView, money: Int) {
     val format = DecimalFormat("₩#,###")
     val money = format.format(money.toLong())
-    textView.text = "총액 $money"
+    "총액 $money".also { textView.text = it }
 }
 
 
+@BindingAdapter("checkIn", "checkOut")
+fun setBookDate(textView: TextView, checkIn: String, checkOut: String) {
+    "$checkIn - $checkOut".also { textView.text = it }
+}
+
+@BindingAdapter("address")
+fun setAddress(textView: TextView, address: MyBookData.Result.Address) {
+    "${address.city}, ${address.district}, ${address.region}, ${address.detail}".also {
+        textView.text = it
+    }
+}

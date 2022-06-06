@@ -45,12 +45,25 @@ data class MyBookDTO(
 fun MyBookDTO.toMyBookData(): MyBookData {
     val list = mutableListOf<MyBookData.Result>()
     this.result?.forEach {
-        val address: List<MyBookDTO.Result.Address>? = it.address
-        val checkIn: String? = it.checkIn
-        val checkOut: String? = it.checkOut
-        val imageThumnail: String? = it.imageThumnail
-        val roomId: Int? = it.roomId
-        val roomName: String? = it.roomName
+        val address: List<MyBookData.Result.Address> = it.address?.toAddressData() ?: emptyList()
+        val checkIn: String = requireNotNull(it.checkIn)
+        val checkOut: String = requireNotNull(it.checkOut)
+        val imageThumnail: String = it.imageThumnail.orEmpty()
+        val roomId: Int = requireNotNull(it.roomId)
+        val roomName: String = requireNotNull(it.roomName)
     }
     return MyBookData(list)
+}
+
+fun List<MyBookDTO.Result.Address>.toAddressData(): List<MyBookData.Result.Address> {
+    val list = mutableListOf<MyBookData.Result.Address>()
+
+    this.forEach {
+        val city = requireNotNull(it.city)
+        val detail = requireNotNull(it.detail)
+        val district = requireNotNull(it.district)
+        val region = requireNotNull(it.region)
+        list.add(MyBookData.Result.Address(city, detail, district, region))
+    }
+    return list
 }

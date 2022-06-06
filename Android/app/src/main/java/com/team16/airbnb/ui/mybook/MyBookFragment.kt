@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.team16.airbnb.R
+import com.team16.airbnb.data.model.bookList
 import com.team16.airbnb.databinding.FragmentHomeBinding
 import com.team16.airbnb.databinding.FragmentMyBookBinding
 
@@ -23,6 +26,18 @@ class MyBookFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val adapter = MyBookAdapter()
+        binding.rvBookList.adapter = adapter
+
+        setBackButton()
+        adapter.submitList(bookList.result)
+    }
+
+    private fun setBackButton() {
+        binding.topAppBar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.homeFragment)
+        }
     }
 
 }
