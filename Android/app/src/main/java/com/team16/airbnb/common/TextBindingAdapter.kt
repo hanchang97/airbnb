@@ -78,4 +78,11 @@ fun setMoneyFormat(textView: TextView, money: Int) {
     textView.text = "$money / 박"
 }
 
+@BindingAdapter("totalMoneyFormat")
+fun setTotalMoneyFormat(textView: TextView, money: Int) {
+    val format = DecimalFormat("₩#,###")
+    val money = format.format(money.toLong())
+    textView.text = "총액 $money"
+}
+
 

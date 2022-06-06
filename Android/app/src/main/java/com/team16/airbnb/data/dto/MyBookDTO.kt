@@ -45,12 +45,12 @@ data class MyBookDTO(
 fun MyBookDTO.toMyBookData(): MyBookData {
     val list = mutableListOf<MyBookData.Result>()
     this.result?.forEach {
-        val address: List<Address>?,
-        val checkIn: String?,
-        val checkOut: String?,
-        val imageThumnail: String?,
-        val roomId: Int?,
-        val roomName: String?
+        val address: List<MyBookDTO.Result.Address>? = it.address
+        val checkIn: String? = it.checkIn
+        val checkOut: String? = it.checkOut
+        val imageThumnail: String? = it.imageThumnail
+        val roomId: Int? = it.roomId
+        val roomName: String? = it.roomName
     }
     return MyBookData(list)
 }

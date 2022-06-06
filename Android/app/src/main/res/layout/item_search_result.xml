@@ -182,7 +182,7 @@
             style="@style/Text_Grey3.14"
             app:layout_constraintWidth_percent="0.9"
             app:layout_constraintTop_toBottomOf="@id/empty_view_4"
-            moneyFormat="@{item.totalPrice}"
+            totalMoneyFormat="@{item.totalPrice}"
             tools:text="총액 ₩1,493,154" />
 
         <View
