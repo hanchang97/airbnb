@@ -1,0 +1,29 @@
+package com.team16.airbnb.ui.mybook.detail
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.team16.airbnb.data.model.detailBook
+import com.team16.airbnb.databinding.FragmentDetailMyBookBinding
+
+class DetailMyBookFragment : Fragment() {
+
+    private val binding: FragmentDetailMyBookBinding by lazy {
+        FragmentDetailMyBookBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.item = detailBook
+
+    }
+}

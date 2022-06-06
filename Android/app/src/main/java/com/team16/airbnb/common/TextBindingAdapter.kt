@@ -2,13 +2,11 @@ package com.team16.airbnb.common
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.util.Log
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.team16.airbnb.R
+import com.team16.airbnb.data.model.Address
 import com.team16.airbnb.data.model.DayInfo
-import com.team16.airbnb.data.model.MyBookData
 import java.text.DecimalFormat
 
 @SuppressLint("UseCompatLoadingForDrawables")
@@ -93,8 +91,18 @@ fun setBookDate(textView: TextView, checkIn: String, checkOut: String) {
 }
 
 @BindingAdapter("address")
-fun setAddress(textView: TextView, address: MyBookData.Result.Address) {
+fun setAddress(textView: TextView, address: Address) {
     "${address.city}, ${address.district}, ${address.region}, ${address.detail}".also {
         textView.text = it
     }
+}
+
+@BindingAdapter("hostName")
+fun setHostName(textView: TextView, name: String) {
+    "호스트: $name".also { textView.text = it }
+}
+
+@BindingAdapter("roomType", "person")
+fun setRoomInfo(textView: TextView, roomType: String, person: Int) {
+    "$roomType ∙ 게스트 ${person}명".also { textView.text = it }
 }

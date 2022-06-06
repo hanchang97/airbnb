@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.team16.airbnb.common.DetailMoveListener
 import com.team16.airbnb.data.model.MyBookData
 import com.team16.airbnb.databinding.ItemMyBookBinding
-import com.team16.airbnb.databinding.ItemWishBinding
 
-class MyBookAdapter :
+class MyBookAdapter(private val listener: DetailMoveListener) :
     ListAdapter<MyBookData.Result, MyBookAdapter.MyBookViewHolder>(MyBookDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyBookViewHolder {
@@ -26,10 +26,18 @@ class MyBookAdapter :
         holder.bind(getItem(position))
     }
 
-    class MyBookViewHolder(private val binding: ItemMyBookBinding) :
+    inner class MyBookViewHolder(private val binding: ItemMyBookBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: MyBookData.Result) {
             binding.item = item
+            setItemClick()
+        }
+
+        private fun setItemClick() {
+            itemView.setOnClickListener {
+                listener.moveDetail()
+            }
         }
     }
 

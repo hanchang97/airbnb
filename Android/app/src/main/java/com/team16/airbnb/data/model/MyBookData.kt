@@ -11,23 +11,14 @@ data class MyBookData(
         val imageThumnail: String,
         val roomId: Int,
         val roomName: String
-    ) {
-
-        data class Address(
-            val city: String,
-            val detail: String,
-            val district: String,
-            val region: String
-        )
-
-    }
+    )
 }
 
 val bookList = MyBookData(
     listOf(
         MyBookData.Result(
             listOf(
-                MyBookData.Result.Address(
+                Address(
                     "서울", "양재동", "서초구", "10-102"
                 )
             ),
@@ -39,7 +30,7 @@ val bookList = MyBookData(
         ),
         MyBookData.Result(
             listOf(
-                MyBookData.Result.Address(
+                Address(
                     "서울", "양재동", "서초구", "10-102"
                 )
             ),
@@ -51,7 +42,7 @@ val bookList = MyBookData(
         ),
         MyBookData.Result(
             listOf(
-                MyBookData.Result.Address(
+                Address(
                     "서울", "양재동", "서초구", "10-102"
                 )
             ),
@@ -63,7 +54,7 @@ val bookList = MyBookData(
         ),
         MyBookData.Result(
             listOf(
-                MyBookData.Result.Address(
+                Address(
                     "서울", "양재동", "서초구", "10-102"
                 )
             ),

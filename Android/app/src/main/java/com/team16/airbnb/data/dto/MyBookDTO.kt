@@ -1,6 +1,7 @@
 package com.team16.airbnb.data.dto
 
 
+import com.team16.airbnb.data.model.Address
 import com.team16.airbnb.data.model.MyBookData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -45,7 +46,7 @@ data class MyBookDTO(
 fun MyBookDTO.toMyBookData(): MyBookData {
     val list = mutableListOf<MyBookData.Result>()
     this.result?.forEach {
-        val address: List<MyBookData.Result.Address> = it.address?.toAddressData() ?: emptyList()
+        val address: List<Address> = it.address?.toAddressData() ?: emptyList()
         val checkIn: String = requireNotNull(it.checkIn)
         val checkOut: String = requireNotNull(it.checkOut)
         val imageThumnail: String = it.imageThumnail.orEmpty()
@@ -55,15 +56,15 @@ fun MyBookDTO.toMyBookData(): MyBookData {
     return MyBookData(list)
 }
 
-fun List<MyBookDTO.Result.Address>.toAddressData(): List<MyBookData.Result.Address> {
-    val list = mutableListOf<MyBookData.Result.Address>()
+fun List<MyBookDTO.Result.Address>.toAddressData(): List<Address> {
+    val list = mutableListOf<Address>()
 
     this.forEach {
         val city = requireNotNull(it.city)
         val detail = requireNotNull(it.detail)
         val district = requireNotNull(it.district)
         val region = requireNotNull(it.region)
-        list.add(MyBookData.Result.Address(city, detail, district, region))
+        list.add(Address(city, detail, district, region))
     }
     return list
 }
