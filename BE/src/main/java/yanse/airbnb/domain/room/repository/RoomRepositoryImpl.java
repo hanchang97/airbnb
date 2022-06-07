@@ -11,9 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
-import yanse.airbnb.domain.image.QRoomImage;
 import yanse.airbnb.domain.room.Room;
-import yanse.airbnb.web.dto.RequestRoomSearchDto;
+import yanse.airbnb.web.dto.room.RequestRoomSearchDto;
 
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
