@@ -46,5 +46,68 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_goto_map"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/empty_view_1"
+            app:layout_constraintWidth_percent="0.23"
+            app:layout_constraintDimensionRatio="84:36"
+            android:backgroundTint="@color/airbnb_Grey1"
+            app:shapeAppearanceOverlay="@style/cardViewRadius"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_v_20"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.2"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_v_80"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.8"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:text="지도"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/gl_v_80"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@id/gl_v_20"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/ic_map"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <View
+            android:id="@+id/empty_view_1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="360:20"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
