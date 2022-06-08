@@ -11,11 +11,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.team16.airbnb.R
 import com.team16.airbnb.databinding.FragmentSearchBinding
 import com.team16.airbnb.ui.MainActivity
 import com.team16.airbnb.ui.home.HomeViewModel
 import com.team16.airbnb.ui.search.detail.DetailSearchActivity
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
@@ -84,17 +88,22 @@ class SearchFragment : Fragment() {
 
     private fun setPopularList() {
 
-        viewModel.getNearTripList()
-
         val adapter = PopularAdapter{
            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
            // startActivity(intent)
-
             (requireActivity() as MainActivity).resultLauncher.launch(intent)
-
         }
+
         binding.rvSearchList.adapter = adapter
-        adapter.submitList(viewModel.nearTripList.value)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.nearTripList.collect {
+                    adapter.submitList(it)
+                }
+            }
+        }
+
     }
 
 }

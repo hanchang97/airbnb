@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,11 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.team16.airbnb.R
@@ -48,8 +44,6 @@ import com.team16.airbnb.ui.theme.Airbnb_Black
 import com.team16.airbnb.ui.theme.Airbnb_Primary
 import com.team16.airbnb.ui.theme.Off_White
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -131,7 +125,6 @@ class HomeFragment : Fragment() {
         LazyHorizontalGrid(
             modifier = Modifier
                 .height(200.dp)
-                //.wrapContentHeight()
                 .fillMaxWidth(),
             rows = GridCells.Fixed(2)
         ) {
@@ -156,7 +149,6 @@ class HomeFragment : Fragment() {
         Row(
             modifier = Modifier
                 .width(220.dp)
-                //.fillMaxWidth(0.3f)
                 .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 .wrapContentHeight()
         ) {
@@ -195,9 +187,8 @@ class HomeFragment : Fragment() {
     @Composable
     fun ScrollBoxes() {
 
-        val homeViewModel: HomeViewModel = viewModel() // 위에서 만든 viewModel과 다른 것??
-        homeViewModel.getNearTripList()
-        homeViewModel.getRecommendTheme()
+        val nearInfoList: List<NearInfo> by viewModel.nearTripList.collectAsState(initial = emptyList())
+        val recommendTheme: List<NearInfo> by viewModel.recommendTheme.collectAsState(initial = emptyList())
 
         Column(
             modifier = Modifier
@@ -229,8 +220,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            NearTripView(info = homeViewModel.nearTripList.collectAsState().value )
-
+            NearTripView(info = nearInfoList )
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -248,7 +238,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            HomeLastView(info = homeViewModel.recommendTheme.collectAsState().value)
+            HomeLastView(info = recommendTheme)
         }
     }
 
@@ -302,6 +292,5 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
 }
