@@ -22,14 +22,15 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     val recommendTheme = _recommendTheme
 
     init {
-
+        getNearTripList()
+        getRecommendTheme()
     }
 
     private fun getHeroInfo() {
         _heroInfo.value
     }
 
-    fun getNearTripList() {
+    private fun getNearTripList() {
         viewModelScope.launch {
             repository.getNearInfo().collect{
                 _nearTripList.value = it
@@ -37,7 +38,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
 
-    fun getRecommendTheme(){
+    private fun getRecommendTheme(){
         viewModelScope.launch {
             repository.getRecommendThem().collect{
                 _recommendTheme.value = it
