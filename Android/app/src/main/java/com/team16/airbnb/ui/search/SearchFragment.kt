@@ -10,14 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.team16.airbnb.R
 import com.team16.airbnb.databinding.FragmentSearchBinding
 import com.team16.airbnb.ui.MainActivity
+import com.team16.airbnb.ui.home.HomeViewModel
 import com.team16.airbnb.ui.search.detail.DetailSearchActivity
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +38,7 @@ class SearchFragment : Fragment() {
         setBackButton()
         setEraseButton()
         setEditText()
-        //setPopularList()
+        setPopularList()
     }
 
     private fun setBackButton() {
@@ -79,7 +82,10 @@ class SearchFragment : Fragment() {
         })
     }
 
-   /* private fun setPopularList() {
+    private fun setPopularList() {
+
+        viewModel.getNearTripList()
+
         val adapter = PopularAdapter{
            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
            // startActivity(intent)
@@ -88,7 +94,7 @@ class SearchFragment : Fragment() {
 
         }
         binding.rvSearchList.adapter = adapter
-        adapter.submitList(list)
-    }*/
+        adapter.submitList(viewModel.nearTripList.value)
+    }
 
 }
