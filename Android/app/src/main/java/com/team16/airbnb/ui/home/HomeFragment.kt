@@ -195,9 +195,9 @@ class HomeFragment : Fragment() {
     @Composable
     fun ScrollBoxes() {
 
-        val viewModel: HomeViewModel = viewModel()
-        viewModel.getNearTripList()
-        viewModel.getRecommendTheme()
+        val homeViewModel: HomeViewModel = viewModel() // 위에서 만든 viewModel과 다른 것??
+        homeViewModel.getNearTripList()
+        homeViewModel.getRecommendTheme()
 
         Column(
             modifier = Modifier
@@ -229,7 +229,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            NearTripView(info = viewModel.nearTripList.collectAsState().value )
+            NearTripView(info = homeViewModel.nearTripList.collectAsState().value )
 
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -248,7 +248,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            HomeLastView(info = viewModel.recommendTheme.collectAsState().value)
+            HomeLastView(info = homeViewModel.recommendTheme.collectAsState().value)
         }
     }
 
