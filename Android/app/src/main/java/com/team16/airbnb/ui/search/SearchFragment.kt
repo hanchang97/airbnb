@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.team16.airbnb.R
-import com.team16.airbnb.data.model.list
 import com.team16.airbnb.databinding.FragmentSearchBinding
 import com.team16.airbnb.ui.MainActivity
 import com.team16.airbnb.ui.search.detail.DetailSearchActivity
@@ -36,7 +35,7 @@ class SearchFragment : Fragment() {
         setBackButton()
         setEraseButton()
         setEditText()
-        setPopularList()
+        //setPopularList()
     }
 
     private fun setBackButton() {
@@ -80,17 +79,16 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun setPopularList() {
+   /* private fun setPopularList() {
         val adapter = PopularAdapter{
            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
            // startActivity(intent)
 
             (requireActivity() as MainActivity).resultLauncher.launch(intent)
 
-
         }
         binding.rvSearchList.adapter = adapter
         adapter.submitList(list)
-    }
+    }*/
 
 }
