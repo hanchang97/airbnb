@@ -4,8 +4,11 @@ import com.team16.airbnb.R
 import com.team16.airbnb.data.model.NearInfo
 import com.team16.airbnb.data.network.HomeApi
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeDataSource(private val api: HomeApi) {
+@Singleton
+class HomeDataSource @Inject constructor(private val api: HomeApi) {
 
     private val list = listOf<NearInfo>(
         NearInfo(
@@ -95,7 +98,7 @@ class HomeDataSource(private val api: HomeApi) {
         emit(list)
     }
 
-    fun getRecommendThem() = flow {
+    fun getRecommendTheme() = flow {
         emit(lastList)
     }
 

@@ -1,11 +1,16 @@
 package com.team16.airbnb.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.team16.airbnb.data.model.NearInfo
 import com.team16.airbnb.data.repository.HomeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(private val repository: HomeRepository): ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
 
     private val _heroInfo = MutableStateFlow("")
     val heroInfo = _heroInfo
@@ -24,7 +29,19 @@ class HomeViewModel(private val repository: HomeRepository): ViewModel() {
         _heroInfo.value
     }
 
-    private fun getNearTripList() = repository.getNearInfo()
+    fun getNearTripList() {
+        viewModelScope.launch {
+            repository.getNearInfo().collect{
+                _nearTripList.value = it
+            }
+        }
+    }
 
-    private fun getRecommendTheme() = repository.getRecommendThem()
+    fun getRecommendTheme(){
+        viewModelScope.launch {
+            repository.getRecommendThem().collect{
+                _recommendTheme.value = it
+            }
+        }
+    }
 }

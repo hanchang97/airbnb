@@ -37,12 +37,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.team16.airbnb.R
 import com.team16.airbnb.data.model.NearInfo
-import com.team16.airbnb.data.model.lastList
-import com.team16.airbnb.data.model.list
 import com.team16.airbnb.databinding.FragmentHomeBinding
 import com.team16.airbnb.ui.theme.AirbnbTheme
 import com.team16.airbnb.ui.theme.Airbnb_Black
@@ -195,6 +194,11 @@ class HomeFragment : Fragment() {
 
     @Composable
     fun ScrollBoxes() {
+
+        val viewModel: HomeViewModel = viewModel()
+        viewModel.getNearTripList()
+        viewModel.getRecommendTheme()
+
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -225,8 +229,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            NearTripView(info = { viewModel.nearTripList.collectAsState().value })
-
+            NearTripView(info = viewModel.nearTripList.collectAsState().value )
 
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -245,7 +248,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            HomeLastView(info = lastList)
+            HomeLastView(info = viewModel.recommendTheme.collectAsState().value)
         }
     }
 
