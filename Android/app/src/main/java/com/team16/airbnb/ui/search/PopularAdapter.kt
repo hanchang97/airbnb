@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.team16.airbnb.data.dto.near.NearResult
 import com.team16.airbnb.data.model.Data
 import com.team16.airbnb.data.model.NearInfo
 import com.team16.airbnb.databinding.ItemPopularBinding
@@ -15,7 +16,7 @@ private const val BODY = 1
 
 class PopularAdapter(
     private val startActivity: () -> Unit
-): ListAdapter<Data, RecyclerView.ViewHolder>(PopularDiffUtil) {
+): ListAdapter<NearResult, RecyclerView.ViewHolder>(PopularDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
             HEADER -> PopularHeaderViewHolder(ItemPopularHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -37,12 +38,12 @@ class PopularAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(position) {
             0 -> (holder as PopularHeaderViewHolder)
-            else -> (holder as PopularViewHolder).bind(getItem(position - 1) as NearInfo)
+            else -> (holder as PopularViewHolder).bind(getItem(position - 1))
         }
     }
 
     inner class PopularViewHolder(private val binding: ItemPopularBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: NearInfo) {
+        fun bind(item: NearResult) {
             binding.item = item
             setOnClickItem()
         }
@@ -56,11 +57,11 @@ class PopularAdapter(
 
     class PopularHeaderViewHolder(private val binding: ItemPopularHeaderBinding): RecyclerView.ViewHolder(binding.root)
 
-    private object PopularDiffUtil: DiffUtil.ItemCallback<Data>() {
-        override fun areItemsTheSame(oldItem: Data, newItem: Data) =
-            oldItem.hashCode() == newItem.hashCode()
+    private object PopularDiffUtil: DiffUtil.ItemCallback<NearResult>() {
+        override fun areItemsTheSame(oldItem: NearResult, newItem: NearResult) =
+            oldItem.title == newItem.title
 
-        override fun areContentsTheSame(oldItem: Data, newItem: Data) =
+        override fun areContentsTheSame(oldItem: NearResult, newItem: NearResult) =
             oldItem == newItem
 
     }

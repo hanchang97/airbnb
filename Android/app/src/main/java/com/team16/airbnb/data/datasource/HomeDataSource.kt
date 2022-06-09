@@ -3,12 +3,15 @@ package com.team16.airbnb.data.datasource
 import com.team16.airbnb.R
 import com.team16.airbnb.data.model.NearInfo
 import com.team16.airbnb.data.network.HomeApi
+import com.team16.airbnb.data.network.SearchApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HomeDataSource @Inject constructor(private val api: HomeApi) {
+class HomeDataSource @Inject constructor(private val homeApi: HomeApi, private val searchApi: SearchApi) {
 
     private val list = listOf<NearInfo>(
         NearInfo(
@@ -105,4 +108,11 @@ class HomeDataSource @Inject constructor(private val api: HomeApi) {
     fun getHeroInfo() = flow {
         emit(R.drawable.hero_image)
     }
+
+
+    // 가까운 여행지 조회
+    fun getNearList() = flow{
+        emit(searchApi.getNearList("around"))
+    }.flowOn(Dispatchers.IO)
+
 }
