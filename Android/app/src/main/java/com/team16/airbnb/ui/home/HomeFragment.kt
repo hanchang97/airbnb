@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -28,16 +27,17 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.team16.airbnb.R
-import com.team16.airbnb.data.model.NearInfo
+import com.team16.airbnb.common.ApiState
+import com.team16.airbnb.data.model.home.NearResultResponse
 import com.team16.airbnb.databinding.FragmentHomeBinding
 import com.team16.airbnb.ui.theme.AirbnbTheme
 import com.team16.airbnb.ui.theme.Airbnb_Black
@@ -82,7 +82,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
     @Composable
     fun HomeView() {
 
@@ -121,7 +120,7 @@ class HomeFragment : Fragment() {
     }
 
     @Composable
-    fun NearTripView(info: List<NearInfo>) {
+    fun NearTripView(info: List<NearResultResponse.NearResult>) {
         LazyHorizontalGrid(
             modifier = Modifier
                 .height(200.dp)
@@ -145,20 +144,20 @@ class HomeFragment : Fragment() {
     }
 
     @Composable
-    fun NearDestination(info: NearInfo) {
+    fun NearDestination(info: NearResultResponse.NearResult) {
         Row(
             modifier = Modifier
                 .width(220.dp)
                 .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 .wrapContentHeight()
         ) {
-            Box(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth(0.35f)
                     .align(CenterVertically)
                     .aspectRatio(1 / 1f)
             ) {
-                ImageLoad(image = info.image)
+                ImageLoad(image = info.imageUrl)
             }
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -169,13 +168,13 @@ class HomeFragment : Fragment() {
                     .align(CenterVertically)
             ) {
                 Text(
-                    text = "${info.name}",
+                    text = "${info.title}",
                     fontSize = 19.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    "${info.distance}",
+                    "${info.content}",
                     fontSize = 16.sp
                 )
             }
@@ -187,8 +186,9 @@ class HomeFragment : Fragment() {
     @Composable
     fun ScrollBoxes() {
 
-        val nearInfoList: List<NearInfo> by viewModel.nearTripList.collectAsState(initial = emptyList())
-        val recommendTheme: List<NearInfo> by viewModel.recommendTheme.collectAsState(initial = emptyList())
+        val heroInfo by viewModel.heroInfo.collectAsState(initial = emptyList())
+        val nearInfoList by viewModel.nearListStateFlow.collectAsState(initial = ApiState.Empty)
+        val recommendTheme by viewModel.recommendTheme.collectAsState(initial = emptyList())
 
         Column(
             modifier = Modifier
@@ -197,12 +197,16 @@ class HomeFragment : Fragment() {
                 .verticalScroll(rememberScrollState())
         ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.hero_image),
-                contentDescription = "hero_image",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.hero_image),
+//                contentDescription = "hero_image",
+//                modifier = Modifier.fillMaxSize(),
+//                contentScale = ContentScale.Crop
+//            )
+            if (heroInfo.isNotEmpty()) {
+                HeroView(heroInfo[0])
+            }
+
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -220,7 +224,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            NearTripView(info = nearInfoList )
+            NearInfoView(nearInfoList)
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -243,7 +247,26 @@ class HomeFragment : Fragment() {
     }
 
     @Composable
-    fun HomeLastView(info: List<NearInfo>) {
+    fun NearInfoView(nearInfoList: ApiState<List<NearResultResponse.NearResult>>) {
+        when (nearInfoList) {
+            is ApiState.Loading -> {
+                Log.d("AppTest", "popularlist/ load data started")
+            }
+            is ApiState.Error -> {
+                Log.d("AppTest", "popularlist/ load data Error, ${nearInfoList.message}")
+            }
+            is ApiState.Success -> {
+                Log.d("AppTest", "popularlist/ load data Success")
+                NearTripView(info = nearInfoList.data)
+            }
+            is ApiState.Empty -> {
+
+            }
+        }
+    }
+
+    @Composable
+    fun HomeLastView(info: List<NearResultResponse.NearResult>) {
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
@@ -257,7 +280,7 @@ class HomeFragment : Fragment() {
     }
 
     @Composable
-    fun LastViewItem(info: NearInfo) {
+    fun LastViewItem(info: NearResultResponse.NearResult) {
         Column(
             modifier = Modifier
                 .wrapContentHeight()
@@ -268,15 +291,59 @@ class HomeFragment : Fragment() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(242 / 294f),
-                shape = RoundedCornerShape(8),
+                shape = RoundedCornerShape(9),
                 elevation = 30.dp
             ) {
-                ImageLoad(image = info.image)
+                ImageLoad(image = info.imageUrl)
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(text = info.title)
+
+        }
+    }
+
+    @OptIn(ExperimentalUnitApi::class)
+    @Composable
+    fun HeroView(heroInfo: NearResultResponse.NearResult) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(360 / 407f)
+        ) {
+            ImageLoad(image = heroInfo.imageUrl)
+
+            Column(
+                modifier = Modifier.padding(start = 21.dp)
+            ) {
+                Text(
+                    text = heroInfo.title,
+                    fontSize = TextUnit(35f, TextUnitType.Sp),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier
+                        .width(150.dp)
+                        .padding(top = 85.dp)
+                )
+                Text(
+                    text = heroInfo.content,
+                    modifier = Modifier
+                        .width(200.dp)
+                        .padding(top = 10.dp)
+                )
+                Card(
+                    backgroundColor = Color.DarkGray,
+                    modifier = Modifier.wrapContentSize().padding(top = 30.dp),
+                    shape = RoundedCornerShape(9.dp)
+                ) {
+                    Text(
+                        text = "여행 아이디어 얻기",
+                        color = Color.White,
+                        fontSize = TextUnit(16f, TextUnitType.Sp),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 14.dp, end = 14.dp)
+                    )
+                }
+            }
 
         }
     }
@@ -288,7 +355,13 @@ class HomeFragment : Fragment() {
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                HomeView()
+                HeroView(
+                    heroInfo = NearResultResponse.NearResult(
+                        imageUrl = "https://yansebnb.s3.ap-northeast-2.amazonaws.com/main/main_image.webp",
+                        title = "슬기로운 자연생활",
+                        content = "에어비앤비가 엄선한 \n위시리스트를 만나보세요."
+                    )
+                )
             }
         }
     }

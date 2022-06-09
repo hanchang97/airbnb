@@ -160,9 +160,9 @@ class SearchFragment : Fragment() {
          }*/
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.nearListStaeFlow.collect {
-                    when (it) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.nearListStateFlow.collect{
+                    when(it){
                         is ApiState.Loading -> {
                             Log.d("AppTest", "popularlist/ load data started")
                         }

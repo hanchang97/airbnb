@@ -12,4 +12,5 @@ interface SearchApi {
 
     @GET("search")
     suspend fun getSearchAreaList(@Query("address") address: String): SearchAreaResponseDto
+
 }

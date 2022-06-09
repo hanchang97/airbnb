@@ -9,12 +9,6 @@ data class DetailBookData(
     val roomInfo: List<RoomInfo>?,
     val roomName: String?
 ) {
-//    data class Address(
-//        val city: String?,
-//        val detail: String?,
-//        val district: String?,
-//        val region: String?
-//    )
 
     data class RoomInfo(
         val host: String?,

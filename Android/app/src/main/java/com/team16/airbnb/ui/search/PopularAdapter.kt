@@ -5,9 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.team16.airbnb.data.dto.near.NearResult
-import com.team16.airbnb.data.model.Data
-import com.team16.airbnb.data.model.NearInfo
+import com.team16.airbnb.data.model.home.NearResultResponse
 import com.team16.airbnb.databinding.ItemPopularBinding
 import com.team16.airbnb.databinding.ItemPopularHeaderBinding
 
@@ -16,16 +14,28 @@ private const val BODY = 1
 
 class PopularAdapter(
     private val startActivity: () -> Unit
-): ListAdapter<NearResult, RecyclerView.ViewHolder>(PopularDiffUtil) {
+) : ListAdapter<NearResultResponse.NearResult, RecyclerView.ViewHolder>(PopularDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
-            HEADER -> PopularHeaderViewHolder(ItemPopularHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> PopularViewHolder(ItemPopularBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return when (viewType) {
+            HEADER -> PopularHeaderViewHolder(
+                ItemPopularHeaderBinding.inflate(
+                    LayoutInflater.from(
+                        parent.context
+                    ), parent, false
+                )
+            )
+            else -> PopularViewHolder(
+                ItemPopularBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(position) {
+        return when (position) {
             0 -> HEADER
             else -> BODY
         }
@@ -36,14 +46,15 @@ class PopularAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(position) {
+        when (position) {
             0 -> (holder as PopularHeaderViewHolder)
             else -> (holder as PopularViewHolder).bind(getItem(position - 1))
         }
     }
 
-    inner class PopularViewHolder(private val binding: ItemPopularBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: NearResult) {
+    inner class PopularViewHolder(private val binding: ItemPopularBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: NearResultResponse.NearResult) {
             binding.item = item
             setOnClickItem()
         }
@@ -55,13 +66,20 @@ class PopularAdapter(
         }
     }
 
-    class PopularHeaderViewHolder(private val binding: ItemPopularHeaderBinding): RecyclerView.ViewHolder(binding.root)
+    class PopularHeaderViewHolder(private val binding: ItemPopularHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-    private object PopularDiffUtil: DiffUtil.ItemCallback<NearResult>() {
-        override fun areItemsTheSame(oldItem: NearResult, newItem: NearResult) =
+    private object PopularDiffUtil : DiffUtil.ItemCallback<NearResultResponse.NearResult>() {
+        override fun areItemsTheSame(
+            oldItem: NearResultResponse.NearResult,
+            newItem: NearResultResponse.NearResult
+        ) =
             oldItem.title == newItem.title
 
-        override fun areContentsTheSame(oldItem: NearResult, newItem: NearResult) =
+        override fun areContentsTheSame(
+            oldItem: NearResultResponse.NearResult,
+            newItem: NearResultResponse.NearResult
+        ) =
             oldItem == newItem
 
     }
