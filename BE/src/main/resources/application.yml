@@ -15,18 +15,8 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
   #        show_sql: true
-
-github:
-  client:
-    id: ${CLIENT_ID}
-    secrets: ${CLIENT_SECRETS}
-  redirect:
-    uri: ${REDIRECT_URL}
-  user:
-    uri: https://api.github.com/user
-  access:
-    token:
-      uri: https://github.com/login/oauth/access_token
+  profiles:
+    include: oauth
 
 logging.level:
   org.hibernate.SQL: debug

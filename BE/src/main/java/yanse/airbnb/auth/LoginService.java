@@ -1,4 +1,4 @@
-package yanse.airbnb.service;
+package yanse.airbnb.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,17 +14,15 @@ public class LoginService {
 	private final MembersRepository membersRepository;
 
 	//TODO:예외처리
-	public Members findLoginUser(GithubUser githubUser, AccessToken accessToken) {
-		if (!isDuplicate(githubUser)) {
-			Members members = githubUser.toEntity(accessToken);
+	public Members findLoginUser(Members members) {
+		if (!isDuplicate(members)) {
 			membersRepository.save(members);
 			return members;
 		}
-		return membersRepository.findByGithubId(githubUser.getGithubId())
-			.orElseThrow(RuntimeException::new);
+		return members;
 	}
 
-	private boolean isDuplicate(GithubUser githubUser) {
-		return membersRepository.findByGithubId(githubUser.getGithubId()).isPresent();
+	private boolean isDuplicate(Members members) {
+		return membersRepository.findByGithubId(members.getGithubId()).isPresent();
 	}
 }

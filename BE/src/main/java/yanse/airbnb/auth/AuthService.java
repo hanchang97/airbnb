@@ -1,4 +1,4 @@
-package yanse.airbnb.service;
+package yanse.airbnb.auth;
 
 import io.netty.resolver.DefaultAddressResolverGroup;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,24 +11,25 @@ import reactor.netty.http.client.HttpClient;
 import yanse.airbnb.auth.dto.AccessToken;
 import yanse.airbnb.auth.dto.AccessTokenRequest;
 import yanse.airbnb.auth.github.GithubUser;
+import yanse.airbnb.domain.member.Members;
 
 
 @Service
 public class AuthService {
 
-	@Value("${github.client.id}")
+	@Value("${oauth2.user.github.client-id}")
 	private String CLIENT_ID;
 
-	@Value("${github.client.secrets}")
+	@Value("${oauth2.user.github.client-secret}")
 	private String CLIENT_SECRETS;
 
-	@Value("${github.redirect.uri}")
+	@Value("${oauth2.user.github.redirect-uri}")
 	private String REDIRECT_URI;
 
-	@Value("${github.access.token.uri}")
+	@Value("${oauth2.provider.github.token-uri}")
 	private String ACCESS_TOKEN_URI;
 
-	@Value("${github.user.uri}")
+	@Value("${oauth2.provider.github.user-info-uri}")
 	private String USER_URI;
 
 	private final HttpClient httpClient = HttpClient.create()
@@ -55,8 +56,8 @@ public class AuthService {
 	}
 
 
-	public GithubUser requestUserInfo(AccessToken accessToken) {
-		return webClient.get()
+	public Members requestUserInfo(AccessToken accessToken) {
+		GithubUser githubUser = webClient.get()
 			.uri(USER_URI)
 			.accept(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, accessToken.authorizationHeaderValue())
@@ -64,5 +65,6 @@ public class AuthService {
 			.bodyToMono(GithubUser.class)
 			.blockOptional()
 			.orElseThrow(RuntimeException::new);
+		return githubUser.toEntity(accessToken);
 	}
 }
