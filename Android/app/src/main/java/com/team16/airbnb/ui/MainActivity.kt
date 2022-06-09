@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if (result.resultCode == Activity.RESULT_OK){
                Log.d("AppTest", "result ok")
+                val address = result.data?.getStringExtra("address") ?: ""
                 val checkIn = result.data?.getStringExtra("checkIn") ?: ""
                 val checkOut = result.data?.getStringExtra("checkOut") ?: ""
                 val min = result.data?.getIntExtra("min", 0) ?: 0
@@ -52,8 +53,9 @@ class MainActivity : AppCompatActivity() {
                 val adult = result.data?.getIntExtra("adult", 0) ?: 0
                 val child = result.data?.getIntExtra("child", 0) ?: 0
                 val infant = result.data?.getIntExtra("infant",0) ?: 0
+                Log.d("TAG", "$address, checkIn,checkOut,min,max,adult,child,infan")
                 viewModel.getSearchResult(
-                    checkIn,checkOut,min,max,adult,child,infant
+                    address, checkIn,checkOut,min,max,adult,child,infant
                 )
 
                // 검색 결과 리스트를 보여주도록 다른 fragment로 바꿔주기

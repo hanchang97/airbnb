@@ -5,6 +5,7 @@ import com.team16.airbnb.data.dto.near.NearResultResponseDto
 import com.team16.airbnb.data.dto.searcharea.SearchAreaResponseDto
 import com.team16.airbnb.data.model.SearchResult
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface SearchApi {
@@ -17,7 +18,7 @@ interface SearchApi {
 
     @GET("search/rooms")
     suspend fun getSearchResult(
-        @Query("address") address: String,
+        @Query(value = "address", encoded = true) address: String,
         @Query("checkIn") checkIn: String,
         @Query("checkOut") checkOut: String,
         @Query("minPrice") minPrice: Int,

@@ -25,6 +25,8 @@ class DetailSearchViewModel @Inject constructor() : ViewModel() {
     private val _pickState = MutableStateFlow(false)
     val pickState: StateFlow<Boolean> = _pickState
 
+    var address = ""
+
     var minMoney = 0
 
     var maxMoney = 0
@@ -36,10 +38,20 @@ class DetailSearchViewModel @Inject constructor() : ViewModel() {
     var infant = 0
 
     val checkIn
-        get() = "${startDate.year}-${startDate.month}-${startDate.day}"
+        get() =
+            when {
+                startDate.month.length == 1 -> "${startDate.year}-0${startDate.month}-${startDate.day}"
+                startDate.day.length == 1 -> "${startDate.year}-0${startDate.month}-0${startDate.day}"
+                else ->  "${startDate.year}-${startDate.month}-${startDate.day}"
+            }
+
 
     val checkOut
-        get() = "${endDate.year}-${endDate.month}-${endDate.day}"
+        get() = when {
+            endDate.month.length == 1 -> "${endDate.year}-0${endDate.month}-${endDate.day}"
+            endDate.day.length == 1 -> "${endDate.year}-0${endDate.month}-0${endDate.day}"
+            else ->  "${endDate.year}-${endDate.month}-${endDate.day}"
+        }
 
     private var startDate = DayInfo()
 

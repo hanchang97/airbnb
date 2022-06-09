@@ -1,5 +1,6 @@
 package com.team16.airbnb.ui.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.team16.airbnb.common.ApiState
@@ -87,6 +88,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository, 
     }
 
     fun getSearchResult(
+        address: String,
         checkIn: String,
         checkOut: String,
         minPrice: Int,
@@ -97,8 +99,9 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository, 
     ) {
         viewModelScope.launch {
             _searchResult.value = ApiState.Loading
+            Log.d("TAG", "viewmodel $address")
             searchRepository.getSearchResult(
-                search, checkIn, checkOut, minPrice, maxPrice, adult, child, infant
+                address, checkIn, checkOut, minPrice, maxPrice, adult, child, infant
             ).catch { e ->
                 _searchResult.value = ApiState.Error(e.message)
             }.collect{ data ->

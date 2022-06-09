@@ -2,6 +2,7 @@ package com.team16.airbnb.ui.search.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -38,6 +39,9 @@ class DetailSearchActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
+        val address = intent.getStringExtra("address") ?: ""
+        Log.d("TAG", "${address}")
+        viewModel.address = address
         setFragment()
         setCalendarPickDateState()
         setSkip()
