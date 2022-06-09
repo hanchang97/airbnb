@@ -9,3 +9,5 @@ data class NearResultResponseDto(
     @SerialName("result")
     val nearResult: List<NearResult>? = listOf()
 )
+
+fun NearResultResponseDto.toNea
