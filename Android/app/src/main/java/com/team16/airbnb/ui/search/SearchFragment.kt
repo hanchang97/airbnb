@@ -53,12 +53,13 @@ class SearchFragment : Fragment() {
         ///
         searchAreaAdapter = SearchAreaAdapter {
             val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
+            intent.putExtra("address", viewModel.search)
             (requireActivity() as MainActivity).resultLauncher.launch(intent)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchAreaListStaeFlow.collect {
+                viewModel.searchAreaListStateFlow.collect {
                     when (it) {
                         is ApiState.Loading -> {
                             Log.d("AppTest", "searchAreaList/ load data started")
@@ -77,7 +78,6 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-        ///
 
         binding.etSearch.textChangesToFlow().debounce(1000)
             .onEach {
@@ -85,6 +85,7 @@ class SearchFragment : Fragment() {
                     binding.rvSearchList.adapter = popularAdapter
                     viewModel.getNearList()
                 } else {
+                    viewModel.search = it.toString()
                     binding.rvSearchList.adapter = searchAreaAdapter
                     viewModel.getSearchAreaList(it.toString())
                 }

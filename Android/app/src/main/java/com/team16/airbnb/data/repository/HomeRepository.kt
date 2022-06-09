@@ -18,12 +18,4 @@ class HomeRepository @Inject constructor(private val dataSource: HomeDataSource)
 
     override fun getNearList() = getInfo(dataSource.getNearList())
 
-    override fun getSearchList(search: String) = flow {
-        dataSource.getSearchList(search).map { dto ->
-            dto.toSearchData()
-        }.collect { data ->
-            emit(data)
-        }
-    }
-
 }

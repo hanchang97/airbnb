@@ -2,19 +2,29 @@ package com.team16.airbnb.ui.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.team16.airbnb.common.ApiState
 import com.team16.airbnb.data.model.SearchResult
 import com.team16.airbnb.databinding.FragmentSearchResultBinding
+import com.team16.airbnb.ui.home.HomeViewModel
 import com.team16.airbnb.ui.search.map.MapActivity
 import com.team16.airbnb.ui.search.roomdetail.RoomDetailActivity
+import kotlinx.coroutines.launch
 
 class SearchResultFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchResultBinding
     private lateinit var searchResultAdapter: SearchResultAdapter
+
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +44,32 @@ class SearchResultFragment : Fragment() {
         }
         binding.rvSearchResultList.adapter = searchResultAdapter
 
-        setSampleData()
+        setData()
         setGoToMap()
+    }
+
+    private fun setData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchResult.collect {
+                    when (it) {
+                        is ApiState.Loading -> {
+                            Log.d("AppTest", "searchAreaList/ load data started")
+                        }
+                        is ApiState.Error -> {
+                            Log.d("AppTest", "searchAreaList/ load data Error, ${it.message}")
+                        }
+                        is ApiState.Success -> {
+                            Log.d("AppTest", "searchAreaList/ load data Success")
+                            searchResultAdapter.submitList(it.data)
+                        }
+                        is ApiState.Empty -> {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setSampleData(){

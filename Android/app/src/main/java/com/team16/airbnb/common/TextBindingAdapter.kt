@@ -106,3 +106,11 @@ fun setHostName(textView: TextView, name: String) {
 fun setRoomInfo(textView: TextView, roomType: String, person: Int) {
     "$roomType ∙ 게스트 ${person}명".also { textView.text = it }
 }
+
+@BindingAdapter("person")
+fun setPerson(textView: TextView, count: Int) {
+    when(count < 0) {
+        true -> textView.text = "0"
+        false -> textView.text = "$count"
+    }
+}
