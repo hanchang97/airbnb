@@ -30,6 +30,9 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: HomeViewModel by activityViewModels()
 
+    private lateinit var popularAdapter: PopularAdapter
+    private lateinit var searchAreaAdapter: SearchAreaAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,10 +50,44 @@ class SearchFragment : Fragment() {
         setEraseButton()
         setPopularList()
 
+        ///
+        searchAreaAdapter = SearchAreaAdapter {
+            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
+            (requireActivity() as MainActivity).resultLauncher.launch(intent)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchAreaListStaeFlow.collect {
+                    when (it) {
+                        is ApiState.Loading -> {
+                            Log.d("AppTest", "searchAreaList/ load data started")
+                        }
+                        is ApiState.Error -> {
+                            Log.d("AppTest", "searchAreaList/ load data Error, ${it.message}")
+                        }
+                        is ApiState.Success -> {
+                            Log.d("AppTest", "searchAreaList/ load data Success")
+                            searchAreaAdapter.submitList(it.data)
+                        }
+                        is ApiState.Empty -> {
+
+                        }
+                    }
+                }
+            }
+        }
+        ///
+
         binding.etSearch.textChangesToFlow().debounce(1000)
             .onEach {
-                if(it.toString().isEmpty()) viewModel.getNearList()
-
+                if (it.toString().isEmpty()) {
+                    binding.rvSearchList.adapter = popularAdapter
+                    viewModel.getNearList()
+                } else {
+                    binding.rvSearchList.adapter = searchAreaAdapter
+                    viewModel.getSearchAreaList(it.toString())
+                }
             }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -106,26 +143,26 @@ class SearchFragment : Fragment() {
 
     private fun setPopularList() {
 
-        val adapter = PopularAdapter{
-           val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
-           // startActivity(intent)
+        popularAdapter = PopularAdapter {
+            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
+            // startActivity(intent)
             (requireActivity() as MainActivity).resultLauncher.launch(intent)
         }
 
-        binding.rvSearchList.adapter = adapter
+        binding.rvSearchList.adapter = popularAdapter
 
-       /* viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.nearTripList.collect {
-                    adapter.submitList(it)
-                }
-            }
-        }*/
+        /* viewLifecycleOwner.lifecycleScope.launch {
+             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                 viewModel.nearTripList.collect {
+                     adapter.submitList(it)
+                 }
+             }
+         }*/
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.nearListStaeFlow.collect{
-                    when(it){
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.nearListStaeFlow.collect {
+                    when (it) {
                         is ApiState.Loading -> {
                             Log.d("AppTest", "popularlist/ load data started")
                         }
@@ -134,7 +171,7 @@ class SearchFragment : Fragment() {
                         }
                         is ApiState.Success -> {
                             Log.d("AppTest", "popularlist/ load data Success")
-                            adapter.submitList(it.data)
+                            popularAdapter.submitList(it.data)
                         }
                         is ApiState.Empty -> {
 
