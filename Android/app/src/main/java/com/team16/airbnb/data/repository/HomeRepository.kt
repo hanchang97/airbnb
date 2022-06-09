@@ -13,4 +13,6 @@ class HomeRepository @Inject constructor(private val dataSource: HomeDataSource)
     fun getRecommendThem() = dataSource.getRecommendTheme()
 
     fun getHeroInfo() = dataSource.getHeroInfo()
+
+    fun getNearList() = dataSource.getNearList()
 }
