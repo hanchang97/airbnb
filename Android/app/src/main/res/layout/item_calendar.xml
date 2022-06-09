@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.team16.airbnb.data.model.CalendarData" />
+            type="com.team16.airbnb.data.model.calendar.CalendarData" />
 
     </data>
 

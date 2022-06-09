@@ -2,7 +2,7 @@ package com.team16.airbnb.ui.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.team16.airbnb.data.model.CalendarData
+import com.team16.airbnb.data.model.calendar.CalendarData
 import com.team16.airbnb.data.model.DayInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

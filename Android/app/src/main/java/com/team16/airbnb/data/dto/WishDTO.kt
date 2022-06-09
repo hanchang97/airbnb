@@ -28,16 +28,16 @@ data class WishDTO(
 }
 
 fun WishDTO.toWishData(): WishData {
-    val list = mutableListOf<WishData.ResultData>()
-    this.result?.forEach {
-        val imageThumnail = it.imageThumnail.orEmpty()
-        val price = requireNotNull(it.price)
-        val review = it.review ?: 0
-        val roomId = requireNotNull(it.roomId)
-        val roomName = requireNotNull(it.roomName)
-        val star = it.star ?: 0.0
+    val list = this.result?.map { (imageThumnail, price, review, roomId, roomName, star) ->
+        WishData.ResultData(
+            imageThumnail.orEmpty(),
+            requireNotNull(price),
+            review ?: 0,
+            requireNotNull(roomId),
+            requireNotNull(roomName),
+            star ?: 0.0
+        )
+    }.orEmpty()
 
-        list.add(WishData.ResultData(imageThumnail, price, review, roomId, roomName, star))
-    }
     return WishData(list)
 }

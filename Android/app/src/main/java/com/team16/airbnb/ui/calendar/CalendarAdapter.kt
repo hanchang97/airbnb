@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.team16.airbnb.common.DateChoiceListener
-import com.team16.airbnb.data.model.CalendarData
+import com.team16.airbnb.data.model.calendar.CalendarData
 import com.team16.airbnb.databinding.ItemCalendarBinding
 
 class CalendarAdapter(

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.team16.airbnb.data.dto.near.NearResult" />
+            type="com.team16.airbnb.data.model.home.NearResultResponse" />
 
     </data>
 
