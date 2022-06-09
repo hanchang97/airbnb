@@ -6,6 +6,7 @@ import com.team16.airbnb.common.ApiState
 import com.team16.airbnb.data.dto.near.NearResult
 import com.team16.airbnb.data.model.NearInfo
 import com.team16.airbnb.data.repository.HomeRepository
+import com.team16.airbnb.data.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val repository: HomeRepository, private val searchRepository: SearchRepository) : ViewModel() {
 
     private val _heroInfo = MutableStateFlow("")
     val heroInfo = _heroInfo
@@ -28,6 +29,9 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
 
     private val _nearListStateFlow = MutableStateFlow<ApiState<List<NearResult>>>(ApiState.Empty)
     val nearListStaeFlow: StateFlow<ApiState<List<NearResult>>> =_nearListStateFlow
+
+    private val _searchAreaListStateFlow = MutableStateFlow<ApiState<List<String>>>(ApiState.Empty)
+    val searchAreaListStaeFlow: StateFlow<ApiState<List<String>>> =_searchAreaListStateFlow
 
     init {
         getNearTripList()
@@ -63,6 +67,21 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                 }.collect{ data ->
                     data.nearResult?.let {
                         _nearListStateFlow.value = ApiState.Success(it)
+                    }
+                }
+        }
+    }
+
+    // 검색어로 여행지 검색
+    fun getSearchAreaList(address: String){
+        viewModelScope.launch {
+            _searchAreaListStateFlow.value = ApiState.Loading
+            searchRepository.getSearchAreaList(address)
+                .catch { e ->
+                    _searchAreaListStateFlow.value = ApiState.Error(e.message)
+                }.collect{ data ->
+                    data.result?.let {
+                        _searchAreaListStateFlow.value = ApiState.Success(it)
                     }
                 }
         }
