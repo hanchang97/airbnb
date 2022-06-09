@@ -23,5 +23,6 @@
     <string name="money_label_string">₩%s - ₩%s</string>
     <string name="check_in_label">체크인</string>
     <string name="book_cancel_label">예약 취소</string>
+    <string name="search_header">근처의 인기여행지</string>
 
 </resources>
