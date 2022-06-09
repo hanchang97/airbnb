@@ -25,8 +25,5 @@ class HomeDataSource @Inject constructor(private val homeApi: HomeApi, private v
         emit(searchApi.getNearList("around"))
     }.flowOn(Dispatchers.IO)
 
-    fun getSearchList(search: String) = flow {
-        emit(searchApi.getSearchList(search))
-    }.flowOn(Dispatchers.IO)
 
 }

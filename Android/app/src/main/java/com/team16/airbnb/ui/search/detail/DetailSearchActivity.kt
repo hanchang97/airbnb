@@ -1,25 +1,20 @@
 package com.team16.airbnb.ui.search.detail
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.team16.airbnb.MoneyRangeFragment
-import com.team16.airbnb.PersonFragment
 import com.team16.airbnb.R
 import com.team16.airbnb.databinding.ActivityDetailSearchBinding
 import com.team16.airbnb.ui.MainActivity
 import com.team16.airbnb.ui.calendar.CalendarFragment
-import com.team16.airbnb.ui.calendar.CalendarViewModel
+import com.team16.airbnb.ui.money.MoneyRangeFragment
+import com.team16.airbnb.ui.person.PersonFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,7 +23,7 @@ class DetailSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailSearchBinding
 
-    private val calendarViewModel: CalendarViewModel by viewModels()
+    private val viewModel: DetailSearchViewModel by viewModels()
 
     private val fragmentList = listOf(CalendarFragment(), MoneyRangeFragment(), PersonFragment())
 
@@ -70,15 +65,35 @@ class DetailSearchActivity : AppCompatActivity() {
 
                 true
             }
-
+            R.id.menu_check -> {
+                if(currentView < 3) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fcv_fragment, fragmentList[currentView]).commit()
+                    currentView++
+                }else {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("address", viewModel.address)
+                    intent.putExtra("checkIn", viewModel.checkIn)
+                    intent.putExtra("checkOut", viewModel.checkOut)
+                    intent.putExtra("min", viewModel.minMoney)
+                    intent.putExtra("max", viewModel.maxMoney)
+                    intent.putExtra("adult", viewModel.adult)
+                    intent.putExtra("child", viewModel.child)
+                    intent.putExtra("infant", viewModel.infant)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+
     private fun setCalendarPickDateState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                calendarViewModel.pickState.collect {
+                viewModel.pickState.collect {
                     binding.pickState = it
                 }
             }
@@ -112,7 +127,7 @@ class DetailSearchActivity : AppCompatActivity() {
 
     private fun setRemove() {
         binding.btnRemove.setOnClickListener {
-            calendarViewModel.setCancelDate()
+            viewModel.setCancelDate()
         }
     }
 

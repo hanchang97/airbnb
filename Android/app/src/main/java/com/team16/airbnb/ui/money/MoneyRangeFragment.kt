@@ -1,4 +1,4 @@
-package com.team16.airbnb
+package com.team16.airbnb.ui.money
 
 import android.os.Bundle
 import android.util.Log
@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import com.stfalcon.pricerangebar.model.BarEntry
-import com.team16.airbnb.databinding.FragmentHomeBinding
+import com.team16.airbnb.R
 import com.team16.airbnb.databinding.FragmentMoneyRangeBinding
+import com.team16.airbnb.ui.search.detail.DetailSearchViewModel
 import java.text.DecimalFormat
 import java.util.ArrayList
 
@@ -18,10 +20,12 @@ class MoneyRangeFragment : Fragment() {
 
     private lateinit var binding: FragmentMoneyRangeBinding
 
+    private val viewModel: DetailSearchViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d("AppTest", "MoneyRangeFragment/ onCreateView")
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_money_range, container, false)
@@ -58,16 +62,27 @@ class MoneyRangeFragment : Fragment() {
         binding.rangeBarWithChart.onLeftPinChanged = { index, leftPinValue ->
             Log.d("AppTest", "leftpin / index : ${index}, value : ${leftPinValue}")
 
-            start = decimalFormat.format(leftPinValue?.substring(0, leftPinValue.length - 2)?.toInt())
+            start =
+                decimalFormat.format(leftPinValue?.substring(0, leftPinValue.length - 2)?.toInt())
             binding.tietLeftpin.setText(start)
+
+            leftPinValue?.substring(0, leftPinValue.length - 2)?.toInt()?.let {
+                viewModel.minMoney = it
+            }
 
             binding.tvMoneyRange.text = getString(R.string.money_label_string, start, end)
         }
+
         binding.rangeBarWithChart.onRightPinChanged = { index, rightPinValue ->
             Log.d("AppTest", "rightpin / index : ${index}, value : ${rightPinValue}")
 
-            end = decimalFormat.format(rightPinValue?.substring(0, rightPinValue.length - 2)?.toInt())
+            end =
+                decimalFormat.format(rightPinValue?.substring(0, rightPinValue.length - 2)?.toInt())
             binding.tietRightpin.setText(end)
+
+            rightPinValue?.substring(0, rightPinValue.length - 2)?.toInt()?.let {
+                viewModel.maxMoney = it
+            }
 
             binding.tvMoneyRange.text = getString(R.string.money_label_string, start, end)
         }

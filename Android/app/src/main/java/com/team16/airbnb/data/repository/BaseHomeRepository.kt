@@ -24,5 +24,4 @@ abstract class BaseHomeRepository {
 
     abstract fun getNearList(): Flow<NearResultResponse>
 
-    abstract fun getSearchList(search: String): Flow<SearchData>
 }

@@ -1,4 +1,4 @@
-package com.team16.airbnb.ui.calendar
+package com.team16.airbnb.ui.search.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class CalendarViewModel @Inject constructor() : ViewModel() {
+class DetailSearchViewModel @Inject constructor() : ViewModel() {
 
     private val _calendar = MutableStateFlow<List<CalendarData>>(emptyList())
     val calendar: StateFlow<List<CalendarData>> = _calendar
@@ -25,10 +25,27 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
     private val _pickState = MutableStateFlow(false)
     val pickState: StateFlow<Boolean> = _pickState
 
-    private var startDate = DayInfo(day = "", month = "")
+    var minMoney = 0
 
-    private var endDate = DayInfo(day = "", month = "")
+    var maxMoney = 0
 
+    var adult = 0
+
+    var child = 0
+
+    var infant = 0
+
+    val checkIn
+        get() = "${startDate.year}-${startDate.month}-${startDate.day}"
+
+    val checkOut
+        get() = "${endDate.year}-${endDate.month}-${endDate.day}"
+
+    private var startDate = DayInfo()
+
+    private var endDate = DayInfo()
+
+    private var todayYear: Int = -1
     private var todayMonth: Int = -1
     private var today: Int = -1
 
@@ -47,6 +64,7 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         var month = cal.get(Calendar.MONTH) + 1
         var year = cal.get(Calendar.YEAR)
 
+        todayYear = year
         todayMonth = month
         today = cal.get(Calendar.DATE)
 
@@ -76,7 +94,7 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         val days = mutableMapOf<Int, DayInfo>()
 
         for (i in 1 until start) {
-            days[id] = DayInfo(id," ", " ", isPossible = false)
+            days[id] = DayInfo(id, " ", " ", isPossible = false)
             id++
         }
 
@@ -87,6 +105,7 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
                         id = id,
                         day = "$i",
                         month = "$month",
+                        year= "$year",
                         isPossible = setIsPossible(today, i)
                     )
                     id++
@@ -98,6 +117,7 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
                             id = id,
                             day = "$i",
                             month = "$month",
+                            year= "$year",
                             isPossible = true
                         )
                     id++
@@ -133,13 +153,13 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
 
     }
 
-    private fun checkDate(dayInfo: DayInfo) = when {
+    private fun checkDate(dayInfo: DayInfo) = when (startDate.id >= dayInfo.id) {
 
-        startDate.month >= dayInfo.month -> {
-            checkDay(dayInfo)
+        true -> {
+            checkDay()
         }
 
-        else -> {
+        false -> {
             endDate = dayInfo
             _pickState.value = true
             setPickDate()
@@ -147,30 +167,21 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun checkDay(dayInfo: DayInfo) = when (startDate.id >= dayInfo.id) {
+    private fun checkDay() {
 
-        true -> {
-            val list = getCopyList()
+        val list = getCopyList()
 
-            list.forEach { data ->
-                data.days[startDate.id]?.apply {
-                    isChoice = false
-                    isStart = false
-                    isEnd = false
-                    isChecked = false
-                }
+        list.forEach { data ->
+            data.days[startDate.id]?.apply {
+                isChoice = false
+                isStart = false
+                isEnd = false
+                isChecked = false
             }
-            startDate = DayInfo(day = "", month = "")
-
-            _calendar.value = list
         }
+        startDate = DayInfo()
 
-        false -> {
-            endDate = dayInfo
-            setPickDate()
-            setEndDateLabel(dayInfo)
-            _pickState.value = true
-        }
+        _calendar.value = list
 
     }
 
@@ -217,8 +228,8 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
 
         }
 
-        startDate = DayInfo(day = "", month = "")
-        endDate = DayInfo(day = "", month = "")
+        startDate = DayInfo()
+        endDate = DayInfo()
         _pickState.value = false
         _calendar.value = list
         _label.value = ""

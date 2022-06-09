@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MoneyRangeFragment">
+        tools:context=".ui.money.MoneyRangeFragment">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_v_4.44"
