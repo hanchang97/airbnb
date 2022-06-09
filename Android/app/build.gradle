@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'kotlinx-serialization'
+
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -17,6 +19,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -93,6 +96,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
 
     // Coil
     implementation "io.coil-kt:coil:2.1.0"
@@ -104,5 +108,10 @@ dependencies {
     // for price chart
     implementation "com.github.stfalcon-studio:StfalconPriceRangeBar-android:v1.5"
 
-
+    // Dependency to include Maps SDK for Android
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    // KTX for the Maps SDK for Android
+    implementation 'com.google.maps.android:maps-ktx:3.2.1'
+    // (Optional) KTX for the Maps SDK for Android Utility Library
+    implementation 'com.google.maps.android:maps-utils-ktx:3.2.1'
 }

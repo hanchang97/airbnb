@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.team16.airbnb.data.model.SearchResult
 import com.team16.airbnb.databinding.FragmentSearchResultBinding
+import com.team16.airbnb.ui.search.map.MapActivity
 import com.team16.airbnb.ui.search.roomdetail.RoomDetailActivity
 
 class SearchResultFragment : Fragment() {
@@ -34,6 +35,7 @@ class SearchResultFragment : Fragment() {
         binding.rvSearchResultList.adapter = searchResultAdapter
 
         setSampleData()
+        setGoToMap()
     }
 
     private fun setSampleData(){
@@ -47,4 +49,10 @@ class SearchResultFragment : Fragment() {
         searchResultAdapter.submitList(sampleDataList.toList())
     }
 
+    private fun setGoToMap(){
+        binding.cvGotoMap.setOnClickListener {
+            val intent = Intent(requireActivity(), MapActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }

@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.team16.airbnb.R
+import com.team16.airbnb.common.DetailMoveListener
 import com.team16.airbnb.data.model.bookList
 import com.team16.airbnb.databinding.FragmentHomeBinding
 import com.team16.airbnb.databinding.FragmentMyBookBinding
 
-class MyBookFragment : Fragment() {
+class MyBookFragment : Fragment(), DetailMoveListener {
 
     private val binding: FragmentMyBookBinding by lazy {
         FragmentMyBookBinding.inflate(layoutInflater)
@@ -27,7 +28,7 @@ class MyBookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = MyBookAdapter()
+        val adapter = MyBookAdapter(this)
         binding.rvBookList.adapter = adapter
 
         setBackButton()
@@ -38,6 +39,10 @@ class MyBookFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().navigate(R.id.homeFragment)
         }
+    }
+
+    override fun moveDetail() {
+        findNavController().navigate(R.id.action_myBookFragment_to_detailMyBookFragment)
     }
 
 }

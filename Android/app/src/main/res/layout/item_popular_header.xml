@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -7,15 +8,31 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/empty_view_top"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="360:32"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
             android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:text="근처의 인기여행지" />
+            android:text="@string/search_header"
+            app:layout_constraintTop_toBottomOf="@id/empty_view_top"
+            app:layout_constraintBottom_toTopOf="@id/empty_view_bottom"/>
+
+        <View
+            android:id="@+id/empty_view_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="360:24"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

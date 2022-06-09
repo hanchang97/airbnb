@@ -8,17 +8,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.team16.airbnb.R
-import com.team16.airbnb.data.model.list
+import com.team16.airbnb.common.ApiState
 import com.team16.airbnb.databinding.FragmentSearchBinding
 import com.team16.airbnb.ui.MainActivity
+import com.team16.airbnb.ui.home.HomeViewModel
 import com.team16.airbnb.ui.search.detail.DetailSearchActivity
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +45,13 @@ class SearchFragment : Fragment() {
 
         setBackButton()
         setEraseButton()
-        setEditText()
         setPopularList()
+
+        binding.etSearch.textChangesToFlow().debounce(1000)
+            .onEach {
+                if(it.toString().isEmpty()) viewModel.getNearList()
+
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setBackButton() {
@@ -52,45 +67,85 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun setEditText() {
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-            }
+    fun EditText.textChangesToFlow(): Flow<CharSequence?> {
+        // flow 콜백 받기
+        return callbackFlow<CharSequence?> {
+            val listener = object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    Unit
+                }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 값 내보내기
+                    trySend(s).isSuccess
+                }
 
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                Log.d("AppTest", "text len : ${s.toString().length}")
-                if (s.toString().isNotEmpty()) {
-                    binding.ivEraseText.visibility = View.VISIBLE
-
-                    // 검색어 기준 정보 가져오기
-
-                } else {
-                    binding.ivEraseText.visibility = View.INVISIBLE
-
-                    // 검색어 x 인 경우 리스트 보여주기
-
+                override fun afterTextChanged(s: Editable?) {
+                    Unit
                 }
             }
 
-        })
+            // 리스너 달아주기
+            addTextChangedListener(listener)
+
+            // 콜백이 사라질 때 실행됨
+            awaitClose {
+                removeTextChangedListener(listener)
+            }
+
+        }.onStart {
+            emit(text)  // EidtText의 getText
+        }
     }
 
     private fun setPopularList() {
+
         val adapter = PopularAdapter{
            val intent = Intent(requireActivity(), DetailSearchActivity::class.java)
            // startActivity(intent)
-
             (requireActivity() as MainActivity).resultLauncher.launch(intent)
-
-
         }
+
         binding.rvSearchList.adapter = adapter
-        adapter.submitList(list)
+
+       /* viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.nearTripList.collect {
+                    adapter.submitList(it)
+                }
+            }
+        }*/
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.nearListStaeFlow.collect{
+                    when(it){
+                        is ApiState.Loading -> {
+                            Log.d("AppTest", "popularlist/ load data started")
+                        }
+                        is ApiState.Error -> {
+                            Log.d("AppTest", "popularlist/ load data Error, ${it.message}")
+                        }
+                        is ApiState.Success -> {
+                            Log.d("AppTest", "popularlist/ load data Success")
+                            adapter.submitList(it.data)
+                        }
+                        is ApiState.Empty -> {
+
+                        }
+                    }
+                }
+            }
+        }
+
+        viewModel.getNearList()
+
     }
 
 }

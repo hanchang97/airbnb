@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,21 +33,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.team16.airbnb.R
 import com.team16.airbnb.data.model.NearInfo
-import com.team16.airbnb.data.model.lastList
-import com.team16.airbnb.data.model.list
 import com.team16.airbnb.databinding.FragmentHomeBinding
 import com.team16.airbnb.ui.theme.AirbnbTheme
 import com.team16.airbnb.ui.theme.Airbnb_Black
 import com.team16.airbnb.ui.theme.Airbnb_Primary
 import com.team16.airbnb.ui.theme.Off_White
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +85,7 @@ class HomeFragment : Fragment() {
 
     @Composable
     fun HomeView() {
+
         Scaffold(
             topBar = {
                 HomeAppbar()
@@ -119,7 +125,6 @@ class HomeFragment : Fragment() {
         LazyHorizontalGrid(
             modifier = Modifier
                 .height(200.dp)
-                //.wrapContentHeight()
                 .fillMaxWidth(),
             rows = GridCells.Fixed(2)
         ) {
@@ -144,7 +149,6 @@ class HomeFragment : Fragment() {
         Row(
             modifier = Modifier
                 .width(220.dp)
-                //.fillMaxWidth(0.3f)
                 .padding(16.dp, 0.dp, 16.dp, 0.dp)
                 .wrapContentHeight()
         ) {
@@ -182,6 +186,10 @@ class HomeFragment : Fragment() {
 
     @Composable
     fun ScrollBoxes() {
+
+        val nearInfoList: List<NearInfo> by viewModel.nearTripList.collectAsState(initial = emptyList())
+        val recommendTheme: List<NearInfo> by viewModel.recommendTheme.collectAsState(initial = emptyList())
+
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -212,7 +220,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            NearTripView(info = list)
+            NearTripView(info = nearInfoList )
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -230,7 +238,7 @@ class HomeFragment : Fragment() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            HomeLastView(info = lastList)
+            HomeLastView(info = recommendTheme)
         }
     }
 
@@ -284,6 +292,5 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
 }

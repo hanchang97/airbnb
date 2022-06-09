@@ -40,8 +40,8 @@
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         app:layout_constraintTop_toTopOf="@id/empty_view_3"
         app:layout_constraintBottom_toBottomOf="@id/empty_view_3"
         app:layout_constraintStart_toEndOf="@id/empty_view_4"
