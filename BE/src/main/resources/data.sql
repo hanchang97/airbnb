@@ -108,16 +108,11 @@ values ('https://yansebnb.s3.ap-northeast-2.amazonaws.com/room/2700978_image2_1.
        ('https://yansebnb.s3.ap-northeast-2.amazonaws.com/room/GangnamStayHill.jpeg', 16),
        ('https://yansebnb.s3.ap-northeast-2.amazonaws.com/room/images+(8).jpeg', 16);
 
-insert into reservation (adult_count, child_count, infant_count, check_in_date_time, check_out_date_time,
+insert into reservation (total_guest, check_in_date_time, check_out_date_time,
                          cleaning_fee, discount_policy, room_tax, service_tax, reservation_price,
                          members_id, room_id)
-values (2, 1, 0, '2022-05-30', '2022-06-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 1, 1),
-       (2, 1, 0, '2020-05-30', '2020-06-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 1, 2),
-       (2, 1, 0, '2021-05-30', '2021-06-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 2, 3),
-       (2, 1, 0, '2022-04-30', '2022-05-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 5, 4),
-       (2, 1, 0, '2022-01-30', '2022-03-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 5, 5),
-       (2, 1, 0, '2022-03-30', '2022-04-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 5, 6),
-       (2, 1, 0, '2022-05-08', '2022-06-30', 10000.0, 'WEEK', 10.0, 10.0, 20000, 5, 7);
+values (3, '2022-05-30', '2022-06-01', 10000.0, 'WEEK', 10.0, 10.0, 20000, 1, 1),
+       (3, '2022-05-30', '2022-06-01', 13000.0, 'WEEK', 10.0, 10.0, 20000, 1, 2);
 
 insert into wish (members_id, room_id)
 values (1, 1);

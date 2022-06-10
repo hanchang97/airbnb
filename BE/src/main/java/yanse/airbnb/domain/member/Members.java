@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,10 +44,15 @@ public class Members {
 	@Embedded
 	private AccessToken accessToken;
 
+	private String jwtToken;
+
 	@OneToMany(mappedBy = "members", cascade = ALL)
 	private List<Wish> wishList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "members", cascade = ALL)
 	private List<Reservation> reservationList = new ArrayList<>();
 
+	public void saveJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
+	}
 }
