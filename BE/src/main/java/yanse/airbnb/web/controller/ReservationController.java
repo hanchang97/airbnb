@@ -1,8 +1,10 @@
 package yanse.airbnb.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import yanse.airbnb.service.ReservationService;
+import yanse.airbnb.web.dto.ResponseDto;
 import yanse.airbnb.web.dto.reservation.ReservationDetailDto;
 import yanse.airbnb.web.dto.reservation.ReservationDto;
 
@@ -16,8 +18,8 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("my")
-    public List<ReservationDto> reservationList(@RequestParam("memberId") Long memberId){
-        return reservationService.findReservationList(memberId);
+    public ResponseDto<List<ReservationDto>> reservationList(@RequestParam("memberId") Long memberId){
+        return new ResponseDto<>(HttpStatus.OK, reservationService.findReservationList(memberId));
     }
 
     @GetMapping("my/{id}")
