@@ -13,27 +13,58 @@ import yanse.airbnb.web.dto.reservation.ReservationDto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional(readOnly = true)
+import yanse.airbnb.domain.member.Members;
+import yanse.airbnb.domain.member.repository.MembersRepository;
+import yanse.airbnb.domain.room.Room;
+import yanse.airbnb.domain.room.repository.RoomRepository;
+import yanse.airbnb.web.dto.reservation.RequestReservationDto;
+
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class ReservationService {
 
-    private final ReservationRepository reservationRepository;
-    private final RoomImageRepository roomImageRepository;
+	private final ReservationRepository reservationRepository;
 
-    public List<ReservationDto> findReservationList(Long id) {
-        return reservationRepository.findAllByReservation(id)
-                .stream()
-                .map(ReservationDto::new)
-                .collect(Collectors.toList());
-    }
+	private final RoomImageRepository roomImageRepository;
 
-    public ReservationDetailDto findReservation(Long id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(RuntimeException::new);
-        List<RoomImageDto> images = roomImageRepository.findAllByRoomId(id)
-                .stream()
-                .map(RoomImageDto::new)
-                .collect(Collectors.toList());
-        return new ReservationDetailDto(reservation, images);
-    }
+	private final RoomRepository roomRepository;
+
+	private final MembersRepository membersRepository;
+
+	public List<ReservationDto> findReservationList(Long id) {
+		return reservationRepository.findAllByReservation(id)
+			.stream()
+			.map(ReservationDto::new)
+			.collect(Collectors.toList());
+	}
+
+	public ReservationDetailDto findReservation(Long id) {
+		Reservation reservation = reservationRepository.findById(id).orElseThrow(RuntimeException::new);
+		List<RoomImageDto> images = roomImageRepository.findAllByRoomId(id)
+			.stream()
+			.map(RoomImageDto::new)
+			.collect(Collectors.toList());
+		return new ReservationDetailDto(reservation, images);
+	}
+
+	@Transactional
+	public void reservation(Long roomId, RequestReservationDto requestReservationDto,
+		String jwtToken) {
+		Room findRoom = findRoom(roomId);
+		Members findMember = findMember(jwtToken);
+
+		Reservation reservation = findRoom.createReservation(findMember, requestReservationDto);
+		reservationRepository.save(reservation);
+	}
+
+	private Members findMember(String jwtToken) {
+		return membersRepository.findByJwtToken(jwtToken)
+			.orElseThrow(RuntimeException::new);
+	}
+
+	private Room findRoom(Long roomId) {
+		return roomRepository.findById(roomId)
+			.orElseThrow(RuntimeException::new);
+	}
 }

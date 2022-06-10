@@ -56,8 +56,8 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
 	private BooleanExpression validCheckInOutTime(LocalDate checkIn, LocalDate checkOut) {
 		return room.reservationList.isEmpty()
-			.or(reservation.checkOutDateTime.loe(LocalDate.from(checkIn.atStartOfDay()))
-				.or(reservation.checkInDateTime.goe(LocalDate.from(checkOut.atStartOfDay()))));
+			.or(reservation.checkOutDateTime.loe(checkIn)
+				.or(reservation.checkInDateTime.goe(checkOut)));
 	}
 
 	private BooleanExpression getAddressContains(String address) {

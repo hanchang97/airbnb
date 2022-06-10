@@ -7,4 +7,6 @@ import yanse.airbnb.domain.member.Members;
 public interface MembersRepository extends JpaRepository<Members, Long> {
 
 	Optional<Members> findByGithubId(String githubId);
+
+	Optional<Members> findByJwtToken(String AccToken);
 }
