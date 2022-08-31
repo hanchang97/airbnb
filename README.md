@@ -39,3 +39,10 @@ airbnb clone 앱 입니다.
 안드로이드 : 2명
 
 백엔드 : 2명
+
+<br>
+
+## 🔨 Branch
+
+메인 개발 브랜치 : dev-AOS
+https://github.com/hanchang97/airbnb/tree/dev-AOS
